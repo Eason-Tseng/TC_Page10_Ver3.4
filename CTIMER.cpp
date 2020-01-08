@@ -378,7 +378,7 @@ void *intervalTimer::PTime(void *arg) {
           switch (VDrid) {
             case (10):
 
-              smem.vSendPedAndRedCountEverySec();
+              smem.vSendPedAndRedCountEverySec();   //台中版紅燈倒數
               //WatchDog
               printf(
                   "*********************************************************************\n");

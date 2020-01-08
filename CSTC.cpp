@@ -1487,16 +1487,6 @@ void *CSTC::_stc_thread_light_control_func(void *) {
                   _current_strategy =
                       _old_strategy; //could not be changed in these _old_strategy!!
                   break;
-                case (STRATEGY_AUTO_CADC):
-                  /*+++++++++++++++++*/
-//                keypad.keypadPort.doDisplayLcdWorkByData_P3();
-                  /*-----------------*/
-                  break;
-                case (STRATEGY_TOD):
-                  /*+++++++++++++++++*/
-//                keypad.keypadPort.doDisplayLcdWorkByData_P3();
-                  /*-----------------*/
-                  break;
               }
               break;
 
@@ -1590,15 +1580,29 @@ void *CSTC::_stc_thread_light_control_func(void *) {
 //==            printf( "TIMER: PLAN\n" );
               /******** lock mutex ********/
               pthread_mutex_lock(&CSTC::_stc_mutex);
-              if (_current_strategy == STRATEGY_TOD
-                  || _current_strategy == STRATEGY_AUTO_CADC ||
-                  _current_strategy == STRATEGY_CADC
+              if (_current_strategy == STRATEGY_TOD || _current_strategy == STRATEGY_AUTO_CADC || _current_strategy == STRATEGY_CADC) //Eason20200108 add  閃光轉三色前插入全紅3秒
+              {
+                unsigned short planorderTem;
+                planorderTem = stc.vGetUSIData(CSTC_exec_plan_phase_order);//紀錄舊Plan order
 
-                  ) {
                 ReSetStep(true);
+
+                if(planorderTem == 0x80 || planorderTem == 0xB0)//舊Plan order == 閃光
+                {
+                  if(planorderTem != stc.vGetUSIData(CSTC_exec_plan_phase_order))//新Plan order != 閃光
+                  {
+                    // printf("\n\n\n\n\n\nnow is add ALLRED 3sec test!!!\n\n\n\n\n");
+                    AllRed5Seconds();
+                    _current_strategy = STRATEGY_TOD;
+                    _exec_phase_current_subphase = 0;
+                    _exec_phase_current_subphase_step = 0;
+                    SendRequestToKeypad();                                
+                  }
+                }
                 ReSetExtendTimer();
                 SetLightAfterExtendTimerReSet();
-                if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) {
+                if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) 
+                {
                   vCheckPhaseForTFDActuateExtendTime_5FCF();
                 }
               }
@@ -10886,8 +10890,6 @@ void CSTC::Lock_to_Determine_SegmentPlanPhase_For_Act(time_t *t,
     int iRunningPlanID;
 
     int iExecSeg;
-    unsigned char ucTmp;
-    DATA_Bit _ControlStrategy;
     CSegmentInfo _should_exec_segment;
 
     static struct tm *currenttime;
@@ -11016,7 +11018,6 @@ bool CSTC::vSendRevSync() {
   try {
     time_t currenttime = time(NULL);
     struct tm *now = localtime(&currenttime);
-    unsigned int temphh = (now->tm_hour), tempmm = (now->tm_min);
     unsigned char data[32];
     MESSAGEOK _MSG;
 
@@ -11145,8 +11146,6 @@ bool CSTC::vReportCCTRevStatus5F82(void) {
 unsigned int CSTC::vDetermineTimeToNextPlan(void) {
   try {
     int iExecSegNo;
-    unsigned char ucTmp;
-    DATA_Bit _ControlStrategy;
 
     unsigned int uiNowSec = 0;
     unsigned int uiNextSegSec = 86400;

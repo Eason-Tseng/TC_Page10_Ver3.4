@@ -817,8 +817,6 @@ try {
     if(siStepID == 0) { vReturnToCenterNACK(0x5F, 0x1C, 0x04, 0x02); return false; }
 
     unsigned short int usiCSTC_RunningPhaseCurrentPhase = stc.vGetUSIData(CSTC_exec_plan_phase_order);  //Should +1
-    unsigned short int usiCSTC_RunningPhaseCurrentSubphase = stc.vGetUSIData(CSTC_exec_phase_current_subphase);  //Should +1
-    unsigned short int usiCSTC_RunningPhaseCurrentSubphaseStep = stc.vGetUSIData(CSTC_exec_phase_current_subphase_step);
     stc.Lock_to_Load_Phase_for_Center(usiCSTC_RunningPhaseCurrentPhase);
 
     return false;

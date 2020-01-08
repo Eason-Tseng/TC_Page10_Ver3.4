@@ -26,10 +26,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
-/*Combo++*/
 #include "CSTC.h"
 #include "CSTORINI.h"
-/*Combo--*/
 
 void SendRequestToKeypad(void) {
     try {
@@ -353,31 +351,6 @@ int main(int argc, char *argv[]) {
             smem.vSetUCData(TC_TrainComingBanSubphase2, iTmp);
         }
 
-        /*
-      ?q?T?????G
-
-      RS232,422,485 ?q?T??
-      /dev/ttyS0(RS232)         ???q????????-GPRS MODEM-(9600 N 8 1)
-      /dev/ttyS1(RS232)         Resrever
-      /dev/ttyS2(RS232)         KEYPAD-(9600 N 8 1)
-      /dev/ttyS3(RS232)         ?O?I????(9600 N 8 1)
-      ??????????(RS485)         RTMS-(9600 N 8 1)
-
-      UDP SOCKET ?q?T??
-      192.168.1.101:6003        ???q????????
-      192.168.1.101:6789        ?O?d??????
-      192.168.1.102:6003        ?{????????
-
-
-      IO ?q?T??
-      LPT1  LCD(240x128)  ???}-0x378
-      DGIO  Light         ???}-In:0x200 Out:0x208
-    */
-
-
-        //?}??RS232,422,485 ?q?T??
-        //?}?????q?????????q?T??
-
         ucTmp = smem.vGetUCData(TC_ReverseLane_Manual_Enable_Status);
         printf("smem.vGetUCData(TC_ReverseLane_Manual_Enable_Status):%d\n", ucTmp);
         if (1 == ucTmp) {
@@ -395,11 +368,10 @@ int main(int argc, char *argv[]) {
                 } else printf("open CenterPort Fail!!\n");
         }
 
-        /*OTCombo0714 Remove DEVICESS*/
-//OT Debug 0523
-        if (iCom2Type == Com2IsTesterPort) {      //??test?
+
+        if (iCom2Type == Com2IsTesterPort) {
             printf("Com2 is TesterPort Port!\n");
-        } else if (iCom2Type == Com2IsGPSPort || iCom2Type == Com2IsHOLUXGPSPort) {       //?}??GPS Port
+        } else if (iCom2Type == Com2IsGPSPort || iCom2Type == Com2IsHOLUXGPSPort) {     
             printf("Com2 is GPSPort Port!\n");
             if (smem.NMEAPort.SetConnDevice(DEVICEGPS)) {
                 if (iCom2Type == Com2IsGPSPort)

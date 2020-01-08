@@ -954,7 +954,7 @@ bool STORAGE::vReadChainSettFile( unsigned char *ucTC92_5F31ManualIN,
 try{
   FILE *_rfile=NULL;
   char filename[36];
-  sprintf( filename,"/cct/Data/SETTING/CHAINSET.bin\0" );
+  sprintf( filename,"/cct/Data/SETTING/CHAINSET.bin" );
   _rfile = fopen(filename, "r"); //fopen return NULL if file not exist
   pthread_mutex_lock(&mutexDisk);
   if(_rfile){
@@ -984,14 +984,11 @@ try {
 
   char cFileTmp[64]={0};
   char cCom2TypeTmp;
-  sprintf(cFileTmp, "/cct/Data/SETTING/ttyS1Type.conf\0");
+  sprintf(cFileTmp, "/cct/Data/SETTING/ttyS1Type.conf");
 
   unsigned short int length=0;
   char cTmpTmp[300]={0};
 
-  char enterCode[2];
-//  enterCode[0]=0x0D;
-//  enterCode[1]=0x0A;
 
   if(iCom2TypeIn == 0) { cCom2TypeTmp = '0'; }
   if(iCom2TypeIn == 1) { cCom2TypeTmp = '1'; }
@@ -1040,8 +1037,6 @@ try{
   char cReadString[16];
   char cTMP[16];
   int iStrLen = 0;
-  int iLine = 0;
-  int iLcnLength = 0;
 
   FILE *_rfile=NULL;
   char filename[36];
@@ -1049,7 +1044,7 @@ try{
   bzero(cReadString, sizeof(cReadString));
   bzero(cTMP, sizeof(cTMP));
 
-  sprintf( filename,"/cct/Data/SETTING/ttyS1Type.conf\0" );
+  sprintf( filename,"/cct/Data/SETTING/ttyS1Type.conf" );
   _rfile = fopen(filename , "r"); //fopen return NULL if file not exist
   pthread_mutex_lock(&mutexDisk);
 
@@ -1091,14 +1086,11 @@ try {
 
   char cFileTmp[64]={0};
   unsigned char ucMBType;
-  sprintf(cFileTmp, "/cct/Data/SETTING/MBType.conf\0");
+  sprintf(cFileTmp, "/cct/Data/SETTING/MBType.conf");
 
   unsigned short int length=0;
   char cTmpTmp[300]={0};
 
-  char enterCode[2];
-//  enterCode[0]=0x0D;
-//  enterCode[1]=0x0A;
 
   if(ucMBTypeIn == 0) { ucMBType = '0'; }
   if(ucMBTypeIn == 1) { ucMBType = '1'; }
@@ -1144,8 +1136,6 @@ try{
   char cReadString[16];
   char cTMP[16];
   int iStrLen = 0;
-  int iLine = 0;
-  int iLcnLength = 0;
 
   FILE *_rfile=NULL;
   char filename[36];

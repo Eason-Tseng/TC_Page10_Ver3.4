@@ -263,7 +263,6 @@ MESSAGEOK CDataToMessageOK::vPackageINFOTo92Protocol(unsigned char *cInfoData, i
 try {
     int i, j;
     int len = 10 + iInfoLength;
-    int lcn; //error
     char data[16];
     bzero(data, 16);
     MESSAGEOK _MESSAGEOUT;
@@ -403,7 +402,6 @@ MESSAGEOK CDataToMessageOK::vPackageINFOToVer94RedCount(BYTE byteCMD,           
 try {
   int iPtr = 0;
   int j;
-  int lcn; //error
   char data[15];
   bzero(data, 15);
   MESSAGEOK _MESSAGEOUT;
@@ -473,7 +471,6 @@ MESSAGEOK CDataToMessageOK::vPackageINFOToVer94v2RedCount(BYTE byteCMD,         
 try {
 
   int j;
-  int lcn; //error
   char data[15];
   bzero(data, 15);
   MESSAGEOK _MESSAGEOUT;
@@ -594,7 +591,6 @@ MESSAGEOK CDataToMessageOK::vPackageINFOTo92ProtocolSetADDR(unsigned char *cInfo
 try {
     int i, j;
     int len = 10 + iInfoLength;
-    int lcn; //error
     char data[16];
     MESSAGEOK _MESSAGEOUT;
 
