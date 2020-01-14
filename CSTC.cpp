@@ -1585,10 +1585,22 @@ void *CSTC::_stc_thread_light_control_func(void *) {
                 unsigned short planorderTem;
                 planorderTem = stc.vGetUSIData(CSTC_exec_plan_phase_order);//紀錄舊Plan order
 
-                ReSetStep(true);
-
-                if(planorderTem == 0x80 || planorderTem == 0xB0)//舊Plan order == 閃光
+                if((planorderTem == 0x80 || planorderTem == 0xB0) && smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch))//舊Plan order == 閃光 && 行人觸動
                 {
+                  AllRed5Seconds();
+                  _current_strategy = STRATEGY_TOD;
+                  _exec_phase._phase_order = 0xB0;
+                  _exec_phase_current_subphase = 0;
+                  _exec_phase_current_subphase_step = 0;
+                  // ReSetStep(true);
+                  SendRequestToKeypad();
+                  ReSetExtendTimer();
+                  SetLightAfterExtendTimerReSet();
+                  if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();         
+                }
+                else if(planorderTem == 0x80 || planorderTem == 0xB0)//舊Plan order == 閃光
+                {
+                  ReSetStep(true);
                   if(planorderTem != stc.vGetUSIData(CSTC_exec_plan_phase_order))//新Plan order != 閃光
                   {
                     // printf("\n\n\n\n\n\nnow is add ALLRED 3sec test!!!\n\n\n\n\n");
@@ -1596,16 +1608,26 @@ void *CSTC::_stc_thread_light_control_func(void *) {
                     _current_strategy = STRATEGY_TOD;
                     _exec_phase_current_subphase = 0;
                     _exec_phase_current_subphase_step = 0;
-                    SendRequestToKeypad();                                
+                    SendRequestToKeypad();
+                    ReSetExtendTimer();
+                    SetLightAfterExtendTimerReSet();
+                    if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();                                
+                  }
+                  else//新舊Plan order == 閃光
+                  {
+                    ReSetExtendTimer();
+                    SetLightAfterExtendTimerReSet();
+                    if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();
                   }
                 }
-                ReSetExtendTimer();
-                SetLightAfterExtendTimerReSet();
-                if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) 
+                else
                 {
-                  vCheckPhaseForTFDActuateExtendTime_5FCF();
+                  ReSetStep(true);
+                  ReSetExtendTimer();
+                  SetLightAfterExtendTimerReSet();
+                  if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();     
                 }
-              }
+              }  
               /******** unlock mutex ********/
               pthread_mutex_unlock(&CSTC::_stc_mutex);
               break;

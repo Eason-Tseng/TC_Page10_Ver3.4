@@ -126,7 +126,7 @@ PDEVICEKEYPAD::PDEVICEKEYPAD(void)
 
 //  pthread_mutex_init(&mutexKeyPad,NULL);
 
-  cSwitch=999;      //¤°»ò¶}Ãö¤]¤£¬O
+  cSwitch=999;      //ï¿½ï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½O
 
   _LastDATA_P6.DBit = 0xFF;
 
@@ -160,9 +160,9 @@ try {
             case 0x01:                                 //keypad response
                  smem.SetRequestKeypad(0);
 
-                 DATA_P1=message.packet[3];            //25­ÓÁä½L¥[«ö¶s(«ö¶s¤£¨Ï¥Î)
-                 DATA_P2=message.packet[4];            //¤£¨Ï¥Î(TC¥Î¨ÓÅªAD­È)
-                 DATA_P3.DBit=message.packet[5];       //SW27~SW34(¶È¨Ï¥ÎSW27»·ºÝ©Î²{³õ¾Þ§@)
+                 DATA_P1=message.packet[3];            //25ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½s(ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ï¥ï¿½)
+                 DATA_P2=message.packet[4];            //ï¿½ï¿½ï¿½Ï¥ï¿½(TCï¿½Î¨ï¿½ÅªADï¿½ï¿½)
+                 DATA_P3.DBit=message.packet[5];       //SW27~SW34(ï¿½È¨Ï¥ï¿½SW27ï¿½ï¿½ï¿½Ý©Î²{ï¿½ï¿½ï¿½Þ§@)
                  DATA_P4=message.packet[6];            //SW35(Address Low Byte)
                  DATA_P5=message.packet[7];            //SW36(Address Hi Byte)
                  DATA_P6.DBit=message.packet[8];            //SW37
@@ -198,14 +198,14 @@ try {
 
 
 //OTCombo0714
-                 if (DATA_P1==0x99) {                     //«ö¨B¶¥
-                   if (cSwitch==3)                                     //¦pªG¦b¤â°Ê
+                 if (DATA_P1==0x99) {                     //ï¿½ï¿½ï¿½Bï¿½ï¿½
+                   if (cSwitch==3)                                     //ï¿½pï¿½Gï¿½bï¿½ï¿½ï¿½
                          stc.Lock_to_Set_Next_Step();
                  }
-                 else if (DATA_P1>=0x80 && DATA_P1<=0x98)              //«öÁä½L,0x99¤â°Ê¤£¥Î,0¤]¤£¤¹³\¶i¤J
-                     DoDisplayLcdWorkByData_P1(DATA_P1);          //¤@¯ë«ö«öÁä³£¬O¦b±±¨îLCDÅÜ¤Æ
+                 else if (DATA_P1>=0x80 && DATA_P1<=0x98)              //ï¿½ï¿½ï¿½ï¿½L,0x99ï¿½ï¿½Ê¤ï¿½ï¿½ï¿½,0ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½iï¿½J
+                     DoDisplayLcdWorkByData_P1(DATA_P1);          //ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä³£ï¿½Oï¿½bï¿½ï¿½ï¿½ï¿½LCDï¿½Ü¤ï¿½
 
-                 address=65535-((int)DATA_P5*256+(int)DATA_P4);   //±o¨ì¸ô¤f½s¸¹
+                 address=65535-((int)DATA_P5*256+(int)DATA_P4);   //ï¿½oï¿½ï¿½ï¿½ï¿½fï¿½sï¿½ï¿½
                  if (address!=smem.GetAddress()) {
                      if (address>=0) smem.SetAddress(address);
                      else smem.SetAddress(0);
@@ -213,11 +213,11 @@ try {
                      screenCtlNo.DisplayNum();
                  }
 
-                 //»·ºÝ¾Þ§@¬°1,²{³õ¾Þ§@¬°0
-//                 if (DATA_P3.switchBit.b1==0 && smem.GetOperMode()==1)        //¦pªG­ì¥»¬O»·ºÝ¾Þ§@,²{¦b¤Á´«¨ì²{³õ¾Þ§@
+                 //ï¿½ï¿½ï¿½Ý¾Þ§@ï¿½ï¿½1,ï¿½{ï¿½ï¿½ï¿½Þ§@ï¿½ï¿½0
+//                 if (DATA_P3.switchBit.b1==0 && smem.GetOperMode()==1)        //ï¿½pï¿½Gï¿½ì¥»ï¿½Oï¿½ï¿½ï¿½Ý¾Þ§@,ï¿½{ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½Þ§@
 
 /*OTCombo0713
-                 if (DATA_P3.switchBit.b1!=smem.GetOperMode())                  //¤@¦ýµo²{¤£¤@¼Ë´N¼g¤J·sªº­È
+                 if (DATA_P3.switchBit.b1!=smem.GetOperMode())                  //ï¿½@ï¿½ï¿½ï¿½oï¿½{ï¿½ï¿½ï¿½@ï¿½Ë´Nï¿½gï¿½Jï¿½sï¿½ï¿½ï¿½ï¿½
                      smem.SetOperMode(DATA_P3.switchBit.b1);
 */
 //OTCombo0714
@@ -232,12 +232,12 @@ try {
                      }
                    }
                  }
-                 else if (DATA_P3.switchBit.b1==0) {                                               //¥þ¬õ
+                 else if (DATA_P3.switchBit.b1==0) {                                               //ï¿½ï¿½ï¿½ï¿½
                      if(ucCSTCControlStrategy != 90) {
                        while(ucNewCSTCControlStrategy != 90) {
-//                     if (cSwitch!=1) {                                                       //¦pªG¤£¬O¥þ¬õ
-                         cSwitch=1;                                                          //¥þ¬õ³Ì¤j
-                         stc.Lock_to_Set_Control_Strategy(STRATEGY_ALLRED);                  //³]©w±±¨îµ¦²¤
+//                     if (cSwitch!=1) {                                                       //ï¿½pï¿½Gï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
+                         cSwitch=1;                                                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ì¤j
+                         stc.Lock_to_Set_Control_Strategy(STRATEGY_ALLRED);                  //ï¿½]ï¿½wï¿½ï¿½ï¿½îµ¦ï¿½ï¿½
                          ucNewCSTCControlStrategy = smem.vGetUCData(TC_CSTC_ControlStrategy);
 
                          //force close 5F18
@@ -248,7 +248,7 @@ try {
                          if(ucNewCSTCControlStrategy != 90) { sleep(1); }
                        }
                      }
-                 } else if (DATA_P3.switchBit.b2==0) {                                        //°{¥ú
+                 } else if (DATA_P3.switchBit.b2==0) {                                        //ï¿½{ï¿½ï¿½
                             if(ucCSTCControlStrategy != 80) {
                               while(ucNewCSTCControlStrategy != 80) {
 //                            if (cSwitch!=2) {
@@ -258,12 +258,12 @@ try {
                                 if(ucNewCSTCControlStrategy != 80) { sleep(1); }
                               }
                             }
-                 } else if (DATA_P3.switchBit.b3==0) {                                        //¤â°Ê
+                 } else if (DATA_P3.switchBit.b3==0) {                                        //ï¿½ï¿½ï¿½
                             if(ucCSTCControlStrategy != 70) {
 
                               //change to TOD first.
                               while(ucNewCSTCControlStrategy != 10) {
-//                              if(cSwitch==1 || cSwitch==2) {                    //·í¤§«e¬°°{¥úor¥þ¬õ
+//                              if(cSwitch==1 || cSwitch==2) {                    //ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½{ï¿½ï¿½orï¿½ï¿½ï¿½ï¿½
 //                                                            while(ucNewCSTCControlStrategy != 80) {
 
 //                              printf("[OTOTOT] GOTO TOD\n");
@@ -273,8 +273,8 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD!!!\n");
 printf("Lock_to_Set_Control_Strategy by KEYPAD!!!\n");
 
 
-                                stc.Lock_to_Set_Control_Strategy(STRATEGY_TOD); //¥ýÅÜ¦^TOD§âphaseÅª¶i¨Ó
-                                usleep(200);                                    //¦pªG¨S¦³sleep, strategyÅÜ¤Ó§Ö, CSTC¤ÏÀ³¤£¤Î
+                                stc.Lock_to_Set_Control_Strategy(STRATEGY_TOD); //ï¿½ï¿½ï¿½Ü¦^TODï¿½ï¿½phaseÅªï¿½iï¿½ï¿½
+                                usleep(200);                                    //ï¿½pï¿½Gï¿½Sï¿½ï¿½sleep, strategyï¿½Ü¤Ó§ï¿½, CSTCï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                                 ucNewCSTCControlStrategy = smem.vGetUCData(TC_CSTC_ControlStrategy);
                                 if(ucNewCSTCControlStrategy != 10) { sleep(1); }
                               }
@@ -286,7 +286,7 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD!!!\n");
                                 if(ucNewCSTCControlStrategy != 70) { sleep(1); }
                               }
                             }
-                 } else {                                                                    //¦Û°Ê
+                 } else {                                                                    //ï¿½Û°ï¿½
                       if(ucCSTCControlStrategy == 10 || ucCSTCControlStrategy == 95 || ucCSTCControlStrategy == 96) {
                       } else  {
 //                        while(ucNewCSTCControlStrategy != 10) {
@@ -316,8 +316,8 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD2!!!\n");
                      uc0F04[1] = 0x04;
                      MESSAGEOK _MSG;
                      //send HW Status
-                     uc0F04[2] = smem.vGetHardwareStatus(3);        //¨ú±oHWstat
-                     uc0F04[3] = smem.vGetHardwareStatus(4);        //¨ú±oHWstat
+                     uc0F04[2] = smem.vGetHardwareStatus(3);        //ï¿½ï¿½ï¿½oHWstat
+                     uc0F04[3] = smem.vGetHardwareStatus(4);        //ï¿½ï¿½ï¿½oHWstat
                      _MSG = oDataToMessageOK.vPackageINFOTo92Protocol(uc0F04, 4, true);
                      _MSG.InnerOrOutWard = cOutWard;
                      writeJob.WritePhysicalOut(_MSG.packet, _MSG.packetLength, DEVICECENTER92);
@@ -332,8 +332,8 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD2!!!\n");
                      uc0F04[1] = 0x04;
                      MESSAGEOK _MSG;
                      //send HW Status
-                     uc0F04[2] = smem.vGetHardwareStatus(3);        //¨ú±oHWstat
-                     uc0F04[3] = smem.vGetHardwareStatus(4);        //¨ú±oHWstat
+                     uc0F04[2] = smem.vGetHardwareStatus(3);        //ï¿½ï¿½ï¿½oHWstat
+                     uc0F04[3] = smem.vGetHardwareStatus(4);        //ï¿½ï¿½ï¿½oHWstat
                      _MSG = oDataToMessageOK.vPackageINFOTo92Protocol(uc0F04, 4, true);
                      _MSG.InnerOrOutWard = cOutWard;
                      writeJob.WritePhysicalOut(_MSG.packet, _MSG.packetLength, DEVICECENTER92);
@@ -418,6 +418,8 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD2!!!\n");
 
                        if(smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == false) {
                          smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch, true);
+                            //                                                  stc.AllRed5Seconds();
+                            // stc.Lock_to_Set_Control_Strategy(STRATEGY_TOD);
                          stc.vChangeTODCurrentStepSec(2, 0);
                        } else {
                          usiTmp = stc.vGetUSIData(CSTC_exec_phase_current_subphase);
@@ -431,7 +433,7 @@ printf("Lock_to_Set_Control_Strategy by KEYPAD2!!!\n");
                  }
 
 
-                 //DATA_P2¤£³B²z
+                 //DATA_P2ï¿½ï¿½ï¿½Bï¿½z
                  _LastDATA_P6.DBit = smem.vGetUCData(TC_KeyPadP6Value);
 
                  if(DATA_P6.switchBit.b1 == 0) DATA_P6.switchBit.b1 = 1; else DATA_P6.switchBit.b1 = 0;
@@ -815,13 +817,13 @@ try {
 
 data[0] = 0x0F;
 data[1] = 0x04;
-data[2] = smem.vGetHardwareStatus(3); //¨ú±oHWstat
-data[3] = smem.vGetHardwareStatus(4); //¨ú±oHWstat
+data[2] = smem.vGetHardwareStatus(3); //ï¿½ï¿½ï¿½oHWstat
+data[3] = smem.vGetHardwareStatus(4); //ï¿½ï¿½ï¿½oHWstat
 
 _MSG1 = oDataToMessageOK.vPackageINFOTo92Protocol(data, 4, true);
 _MSG1.InnerOrOutWard = cOutWard;
 writeJob.WritePhysicalOut(_MSG1.packet, _MSG1.packetLength, DEVICECENTER92);
-//¶Ç°eµwÅéª¬ºA
+//ï¿½Ç°eï¿½wï¿½éª¬ï¿½A
 
 usleep(100000);
 
@@ -834,7 +836,7 @@ data1[2] = 0;
 _MSG2 = oDataToMessageOK.vPackageINFOTo92Protocol(data1, 3, true);
 _MSG2.InnerOrOutWard = cOutWard;
 writeJob.WritePhysicalOut(_MSG2.packet, _MSG2.packetLength, DEVICECENTER92);
-//¶Ç°e­n¨D¤¤¤ß¹ï®É
+//ï¿½Ç°eï¿½nï¿½Dï¿½ï¿½ï¿½ß¹ï¿½ï¿½
 
 int iReturnCommandSet = smem.vGet0FCommandSet();
 if (iReturnCommandSet >= 2 ) { //Advanced
@@ -854,7 +856,7 @@ data2[5] = ResetTime.Min;
 _MSG3 = oDataToMessageOK.vPackageINFOTo92Protocol(data2, 6,true);
 _MSG3.InnerOrOutWard = cOutWard;
 writeJob.WritePhysicalOut(_MSG3.packet, _MSG3.packetLength, DEVICECENTER92);
-//¶Ç°e¦^³ø¤W¦¸Â_¹q®É¶¡
+//ï¿½Ç°eï¿½^ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½_ï¿½qï¿½É¶ï¿½
 }
 
 usleep(100000);
@@ -869,7 +871,7 @@ data3[3] = 0x52;
 _MSG4 = oDataToMessageOK.vPackageINFOTo92Protocol(data3, 4, true);
 _MSG4.InnerOrOutWard = cOutWard;
 writeJob.WritePhysicalOut(_MSG4.packet, _MSG4.packetLength, DEVICECENTER92);
-//¦^³øµwÅé­«¸m¦¨¥\
+//ï¿½^ï¿½ï¿½ï¿½wï¿½é­«ï¿½mï¿½ï¿½ï¿½\
 }
 
 } catch (...) {}
