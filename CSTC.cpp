@@ -2244,11 +2244,11 @@ void CSTC::ReSetExtendTimer() {
         || _current_strategy == STRATEGY_AUTO_CADC ||
         _current_strategy == STRATEGY_TOD) {
 
-      if( _exec_phase_current_subphase_step==0 ) {
-          CalculatePgCount();
-          //jacky20141121
-          CalculatePrCount();
-      }
+      // if( _exec_phase_current_subphase_step==0 ) {
+      //     CalculatePgCount();
+      //     //jacky20141121
+      //     CalculatePrCount();
+      // }
 
 
       if (_exec_plan._phase_order == FLASH_PHASEORDER
@@ -2276,8 +2276,8 @@ void CSTC::ReSetExtendTimer() {
           }
         }
 
-        if (_exec_phase_current_subphase_step == 0)
-          CalculateAndSendRedCount(0); //calculate red count after compensation calculated
+        // if (_exec_phase_current_subphase_step == 0)
+        //   CalculateAndSendRedCount(0); //calculate red count after compensation calculated
 
         pthread_mutex_lock(&CPlanInfo::_plan_mutex);
         vCalculateAndSendPeopleLightCount();
@@ -2335,6 +2335,12 @@ void CSTC::ReSetExtendTimer() {
                 _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_allred(
                     _exec_plan._shorten_cycle);
             break;
+        }
+        if( _exec_phase_current_subphase_step==0 ) //Eason20200120 fix redcountdown sec not compen
+        {
+        CalculatePgCount();
+        CalculatePrCount();
+        CalculateAndSendRedCount(0); 
         }
         pthread_mutex_unlock(&CPlanInfo::_plan_mutex);
       }
@@ -4368,6 +4374,7 @@ void CSTC::Lock_to_Determine_SegmentPlanPhase(void) {
     if (smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch))               //close ActuateType
     {
       smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch, false);
+      smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch,true); //Eason20200117 add
       SegmentTypeUpdate = true;
       PlanUpdate = true;
     }
@@ -4775,6 +4782,9 @@ void CSTC::CalculateCompensation_in_TOD(void) {
 
     //OT20111107
     if (smem.vGetThisCycleRunCCJPlan5F18() == true) {
+      return;
+    }
+    if(smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch)){ //Eason20200117 add
       return;
     }
 
@@ -5951,20 +5961,12 @@ void CSTC::CalculateAndSendRedCount(const short int diff) {
     iSubCnt = _exec_phase._subphase_count;
     iSignalCnt = _exec_phase._signal_count;
 
-//    printf("redcount, iSubCnt:%d, iSignalCnt:%d\n", iSubCnt, iSignalCnt);
-
     for (int i = 0; i < iSubCnt; i++) {
       for (int j = 0; j < iSignalCnt; j++) {
         bCountIF[i][j] = false;
         bCountIFEnable[j] = true;
-
-//            printf("light:%X\n", _exec_phase._ptr_subphase_step_signal_status[i][0][j]);
-
-        usiPhaseTmp = _exec_phase._ptr_subphase_step_signal_status[i][0][j]
-            & 0x03F0;  //when green light.
-//            usiPhaseTmp = _exec_phase._ptr_subphase_step_signal_status[i][0][j] & 0xF003;  //when green light.
+        usiPhaseTmp = _exec_phase._ptr_subphase_step_signal_status[i][0][j] & 0x03F0;  ////[分相][步階][卡號] when green light.
         if (usiPhaseTmp == 0) {
-//              printf("i:%d, j:%d, bCountIF = true\n", i, j);
           bCountIF[i][j] = true;
         }
       }
@@ -5981,31 +5983,17 @@ void CSTC::CalculateAndSendRedCount(const short int diff) {
     } else {
       for (int i = _exec_phase_current_subphase; iSubCalCntTmp < iSubCnt; i++) {
         if (i == iSubCnt) i = 0;         //round..
-
         for (int j = 0; j < iSignalCnt; j++) {
-//                printf("for while, i:%d, j:%d\n", i, j);
           if (bCountIF[i][j] == false)      //don't shining, after
           {
             bCountIFEnable[j] = false;
-
-            //OT1000106
-            if (ucNextLightStatus[j] == 255) {
+            if (ucNextLightStatus[j] == 255) 
+            {
             }
-
-//                    printf("i:%d bCountIFEnable[%d] = false\n", i, j);
           }
-
-          /*
-                                    if(bCountIF[i][j] == true) printf("bCountIF[%d][%d] = true\n", i, j);
-                                    else printf("bCountIF[%d][%d] = false\n", i, j);
-                                    if(bCountIFEnable[j] == true) printf("bCountIFEnable[%d] = true\n", j);
-                                    else printf("bCountIFEnable[%d] = false\n", j);
-                    */
-
           if (bCountIF[i][j] == true && bCountIFEnable[j] == true) {
             Data[j] +=
                 _exec_plan._ptr_subplaninfo[i].compensated_phase_time(_exec_plan._shorten_cycle);
-//                    printf("time++, i:%d, j:%d, t:%d\n", i, j,_exec_plan._ptr_subplaninfo[i].compensated_phase_time(_exec_plan._shorten_cycle));
           }
         }
 

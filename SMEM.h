@@ -479,6 +479,7 @@ private:
 //OT Debug 0523
     bool bTC_ActuateTypeFunctionEnable;
     bool bSmemTC_CCT_In_LongTanu_ActuateType_Switch;                        //?s??S?O???, 1 cycle change execplan
+    bool bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch; //Eason20200117 add
     unsigned short int usiSmemTC_CCT_In_LongTanu_ActuateType_PlanID;                         //when actuating, change to this plan
     bool bActuateRunningFlag;
     unsigned char ucActuatePhaseExtend;                                     //trash

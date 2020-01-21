@@ -22,7 +22,7 @@ SCREENOperStat::~SCREENOperStat(void)
 {
 }
 //---------------------------------------------------------------------------
-void SCREENOperStat::DoKeyWork(BYTE key)              //¤w¹LÂo,¶i¨Óªº¬O0x80~0x98¤§¶¡,5X5«öÁä
+void SCREENOperStat::DoKeyWork(BYTE key)              //ï¿½wï¿½Lï¿½o,ï¿½iï¿½Óªï¿½ï¿½O0x80~0x98ï¿½ï¿½ï¿½ï¿½,5X5ï¿½ï¿½ï¿½ï¿½
 {
 try {
     switch (key) {
@@ -54,9 +54,9 @@ void SCREENOperStat::InitDispWord(void)
 {
 try {
     for (int i=0;i<8;i++) {
-         if (i>=0 && i<=3) dateWord[i].X=80+i*8;                               //xxxx¦~
-         else if (i>=4 && i<=5) dateWord[i].X=128+(i-4)*8;                      //xx¤ë
-         else if (i>=6 && i<=7) dateWord[i].X=160+(i-6)*8;                      //xx¤é
+         if (i>=0 && i<=3) dateWord[i].X=80+i*8;                               //xxxxï¿½~
+         else if (i>=4 && i<=5) dateWord[i].X=128+(i-4)*8;                      //xxï¿½ï¿½
+         else if (i>=6 && i<=7) dateWord[i].X=160+(i-6)*8;                      //xxï¿½ï¿½
          dateWord[i].Y=32;
          dateWord[i].width=8;
          dateWord[i].height=16;

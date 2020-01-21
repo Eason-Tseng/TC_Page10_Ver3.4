@@ -120,9 +120,9 @@ try {
     bTCSegmentTypeUpdate = false;
     ucCSTCControlStrategy = 10; //TOD
 
-    iFirmwareYear = 2018;
-    iFirmwareMonth = 03;
-    iFirmwareDay = 23;
+    iFirmwareYear = 2018; //控制器韌體版本時間 年
+    iFirmwareMonth = 03; //控制器韌體版本時間 月
+    iFirmwareDay = 23; //控制器韌體版本時間 日
 
     //20140415, add dynamic seg for HsinChu dynamic control.
     //20140211, add special version for SIPA ped.
@@ -166,9 +166,9 @@ try {
     iFirmwareCompanyID = 0x00;
 
 //here select ICOP & ARBOR
-    iFirmwareFirstVersion = 3;
+    iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
 //    iFirmwareFirstVersion = 6;
-    iFirmwareSecondVersion = ucMBType;
+    iFirmwareSecondVersion = ucMBType;//控制器韌體版本Lo位元
 
 /*
 enum ControlStrategy{
@@ -2535,6 +2535,13 @@ try {
       bRet = bSmemTC_CCT_In_LongTanu_ActuateType_Switch;
       pthread_mutex_unlock(&mutexSmem);
       break;
+
+    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason20200121 add
+      pthread_mutex_lock(&mutexSmem);
+      bRet = bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch;
+      pthread_mutex_unlock(&mutexSmem);
+      break;
+
     case(TC_CCT_In_LongTanu_ActuateType_FunctionEnable):
       pthread_mutex_lock(&mutexSmem);
       bRet = bTC_ActuateTypeFunctionEnable;
@@ -2671,6 +2678,13 @@ try {
       bSmemTC_CCT_In_LongTanu_ActuateType_Switch = bTMP;
       pthread_mutex_unlock(&mutexSmem);
       break;
+
+    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason20200121 add
+      pthread_mutex_lock(&mutexSmem);
+      bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch = bTMP;
+      pthread_mutex_unlock(&mutexSmem);
+      break;
+
     case(TC_CCT_In_LongTanu_ActuateType_FunctionEnable):
       pthread_mutex_lock(&mutexSmem);
       bTC_ActuateTypeFunctionEnable = bTMP;
@@ -5084,7 +5098,7 @@ try {
     for(int i = 0; i < 8; i++) {
         if(redcount_remainder[i] > 0) {
             redcount_remainder[i]--;
-            printf("%d ",redcount_remainder[i]);
+            printf("%dstd.%d ",i,redcount_remainder[i]);
         }
     }
     printf("\n");

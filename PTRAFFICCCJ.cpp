@@ -1009,7 +1009,7 @@ try {
         vReturnToCenterACK(0x5F, 0xA2);
 
         if(smem.vGetUCData(DynShowRedCountForAct) == 1) {
-          stc.CalculateAndSendRedCountInDyn(0);
+          // stc.CalculateAndSendRedCountInDyn(0);
         }
 
       break;
@@ -1019,7 +1019,7 @@ try {
         vReturnToCenterACK(0x5F, 0xA2);
 
         if(smem.vGetUCData(DynShowRedCountForAct) == 1) {
-          stc.CalculateAndSendRedCountInDyn(0);
+          // stc.CalculateAndSendRedCountInDyn(0);
         }
 
       break;

@@ -155,6 +155,7 @@ void SendRequestToKeypad(void);                                                 
 //OT Debug 0523
 #define TC_CCT_In_LongTanu_ActuateType_Switch 18
 #define TC_CCT_In_LongTanu_ActuateType_FunctionEnable 19
+#define TC_CCT_In_LongTanu_ActuateType_comped_Switch 22 //Eason20200117 add
 
 //OT Debug Signal 951116
 #define TC_SIGNAL_NEXT_STEP_OK 20
