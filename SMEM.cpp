@@ -5098,7 +5098,7 @@ try {
     for(int i = 0; i < 8; i++) {
         if(redcount_remainder[i] > 0) {
             redcount_remainder[i]--;
-            printf("%dstd.%d ",i,redcount_remainder[i]);
+            printf("%d ",redcount_remainder[i]);
         }
     }
     printf("\n");
