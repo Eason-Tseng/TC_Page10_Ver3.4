@@ -20,7 +20,7 @@ SCREENFWVerDT::~SCREENFWVerDT(void)
 {
 }
 //---------------------------------------------------------------------------
-void SCREENFWVerDT::DoKeyWork(BYTE key)              //¤w¹LÂo,¶i¨Óªº¬O0x80~0x98¤§¶¡,5X5«öÁä
+void SCREENFWVerDT::DoKeyWork(BYTE key)              //ï¿½wï¿½Lï¿½o,ï¿½iï¿½Óªï¿½ï¿½O0x80~0x98ï¿½ï¿½ï¿½ï¿½,5X5ï¿½ï¿½ï¿½ï¿½
 {
 try {
     switch (key) {
@@ -85,21 +85,21 @@ try {
         lcd240x128.DISPLAY_GRAPHIC_XY(fwDate[7].X,fwDate[7].Y,word8x16[cDay%10],fwDate[7].height,fwDate[7].width/8);
     }
 
-    ucFW51Year = smem.vGetW77E58FWVer(0);
-    ucFW51Month = smem.vGetW77E58FWVer(1);
-    ucFW51Day = smem.vGetW77E58FWVer(2);
+    // ucFW51Year = smem.vGetW77E58FWVer(0);
+    // ucFW51Month = smem.vGetW77E58FWVer(1);
+    // ucFW51Day = smem.vGetW77E58FWVer(2);
 
-    if(ucFW51Year == 0 && ucFW51Month == 0 && ucFW51Day == 0) {
-    } else {
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[0].X,fwW77E58[0].Y,word8x16[2],fwW77E58[0].height,fwW77E58[0].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[1].X,fwW77E58[1].Y,word8x16[0],fwW77E58[1].height,fwW77E58[1].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[2].X,fwW77E58[2].Y,word8x16[ucFW51Year / 10],fwW77E58[2].height,fwW77E58[2].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[3].X,fwW77E58[3].Y,word8x16[ucFW51Year % 10],fwW77E58[3].height,fwW77E58[3].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[4].X,fwW77E58[4].Y,word8x16[ucFW51Month / 10],fwW77E58[4].height,fwW77E58[4].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[5].X,fwW77E58[5].Y,word8x16[ucFW51Month % 10],fwW77E58[5].height,fwW77E58[5].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[6].X,fwW77E58[6].Y,word8x16[ucFW51Day / 10],fwW77E58[6].height,fwW77E58[6].width/8);
-      lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[7].X,fwW77E58[7].Y,word8x16[ucFW51Day % 10],fwW77E58[7].height,fwW77E58[7].width/8);
-    }
+    // if(ucFW51Year == 0 && ucFW51Month == 0 && ucFW51Day == 0) {
+    // } else {
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[0].X,fwW77E58[0].Y,word8x16[2],fwW77E58[0].height,fwW77E58[0].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[1].X,fwW77E58[1].Y,word8x16[0],fwW77E58[1].height,fwW77E58[1].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[2].X,fwW77E58[2].Y,word8x16[ucFW51Year / 10],fwW77E58[2].height,fwW77E58[2].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[3].X,fwW77E58[3].Y,word8x16[ucFW51Year % 10],fwW77E58[3].height,fwW77E58[3].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[4].X,fwW77E58[4].Y,word8x16[ucFW51Month / 10],fwW77E58[4].height,fwW77E58[4].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[5].X,fwW77E58[5].Y,word8x16[ucFW51Month % 10],fwW77E58[5].height,fwW77E58[5].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[6].X,fwW77E58[6].Y,word8x16[ucFW51Day / 10],fwW77E58[6].height,fwW77E58[6].width/8);
+    //   lcd240x128.DISPLAY_GRAPHIC_XY(fwW77E58[7].X,fwW77E58[7].Y,word8x16[ucFW51Day % 10],fwW77E58[7].height,fwW77E58[7].width/8);
+    // }
 
   } catch (...) {}
 }
@@ -144,9 +144,9 @@ void SCREENFWVerDT::DoKeyF2Work(void)
 {
 try {
     system("sync");
-    system("rm -f /cct/Data/SETTING/*.txt");                 //²M°£change log
+    system("rm -f /cct/Data/SETTING/*.txt");                 //ï¿½Mï¿½ï¿½change log
     system("sync");
-    system("/cct/update.sh");                                //§ó´«µ{¦¡
+    system("/cct/update.sh");                                //ï¿½ó´«µ{ï¿½ï¿½
     screenCtlSetup.DisplayCtlSetup();
   } catch (...) {}
 }

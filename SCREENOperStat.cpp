@@ -4,6 +4,7 @@
 #include "SCREENCtlSetup.h"
 #include "LCD240x128.h"
 #include "SMEM.h"
+#include "screenGreenConflictRecord.h"  //Eason20200203
 
 #include "SCREENMBSelect.h"
 #include "SCREENUart2.h"
@@ -26,6 +27,9 @@ void SCREENOperStat::DoKeyWork(BYTE key)              //ï¿½wï¿½Lï¿½o,ï¿½iï¿½Óªï¿
 {
 try {
     switch (key) {
+        case 0x8A:   //GreenConflict
+          DoKeyAWork();
+        break;
         case 0x90:
           DoKeyF1Work();
         break;
@@ -116,7 +120,7 @@ try {
     lcd240x128.DISPLAY_GRAPHIC(0,operStatBitmap,128,30);
 
     vShowGPSTime(0);
-    vShowMachineLocation();
+    // vShowMachineLocation();
 
   } catch (...) {}
 }
@@ -282,7 +286,11 @@ void SCREENOperStat::vShowGreenConflict(void)
 
 
 }
-
+//---------------------------------------------------------------------------
+void SCREENOperStat::DoKeyAWork(void)
+{
+  screenGreenConflictRecord.DisplayGreenConflictRecord();
+}
 //---------------------------------------------------------------------------
 void SCREENOperStat::DoKeyF1Work(void)
 {

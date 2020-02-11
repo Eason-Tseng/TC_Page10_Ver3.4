@@ -686,6 +686,77 @@ try{
   pthread_mutex_unlock(&mutexDisk);
 } catch(...){}
 }
+//-----------Eason20200131----------------------------------------------------------------
+bool STORAGE::vWriteGreenConflictToFile(char *cTmp)
+{
+try{
+
+  struct tm* currenttime;
+  time_t now = time(NULL);
+  currenttime = localtime(&now);
+
+  FILE *Lane_wfile=NULL;
+
+  char cFileTmp[64]={0};
+  sprintf(cFileTmp, "/cct/Data/SETTING/");
+
+  char dateTemp[32]={0};
+  // sprintf(dateTemp, "%#04d%#02d%#02d", currenttime->tm_year+1900, currenttime->tm_mon+1, currenttime->tm_mday);
+  // strcat(cFileTmp,dateTemp);
+  // strcat(cFileTmp,"_changeLog.txt");
+  strcat(cFileTmp,"GreenConflict.txt");
+
+  char cTimeHeader[64]={0};
+  sprintf(cTimeHeader, "%#04d%#02d%#02d%#02d%#02d\0", currenttime->tm_year+1900, currenttime->tm_mon+1, currenttime->tm_mday, currenttime->tm_hour, currenttime->tm_min);
+
+  unsigned short int length=0;
+  char cTmpTmp[300]={0};
+
+  strcat(cTmpTmp,cTimeHeader);
+  strcat(cTmpTmp,cTmp);
+
+  for (int i=0;i<300;i++)
+  if (cTmpTmp[i]=='\0') {
+      length=i;
+      break;
+  }
+
+  char enterCode[2];
+  enterCode[0]=0x0D;
+  enterCode[1]=0x0A;
+
+  Lane_wfile = fopen(cFileTmp , "a+"); //fopen return NULL if file not exist
+
+  pthread_mutex_lock(&mutexDisk);
+  if(Lane_wfile)
+  {
+    char check[6][20];
+    fread(check,120,1,Lane_wfile);
+    printf("%s \n",check);
+    if(check[5][19] == 0x0A)
+    {
+      fclose(Lane_wfile);
+      system("rm /cct/Data/SETTING/GreenConflict.txt");
+      Lane_wfile = fopen(cFileTmp , "a+");
+      if(Lane_wfile)
+      {
+        for(int i=1;i<6;i++) fwrite(check[i],20,1,Lane_wfile);
+        fwrite( cTmpTmp, length, 1, Lane_wfile );
+        fwrite( enterCode, 2, 1, Lane_wfile );   
+        fclose(Lane_wfile);
+      }
+    }
+    else
+    {
+      fwrite( cTmpTmp, length, 1, Lane_wfile );
+      fwrite( enterCode, 2, 1, Lane_wfile );        
+      fclose( Lane_wfile );
+    }
+  }
+  system("sync");
+  pthread_mutex_unlock(&mutexDisk);
+} catch(...){}
+}
 //---------------jacky20140507------------------------------------------------------------
 bool STORAGE::vWriteReverseLog(char *cTmp)
 {

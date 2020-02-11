@@ -15,7 +15,7 @@ SCREENNone::~SCREENNone(void)
 {
 }
 //---------------------------------------------------------------------------
-void SCREENNone::DoKeyWork(BYTE key)                                            //¤w¹LÂo,¶i¨Óªº¬O0x80~0x98¤§¶¡,5X5«öÁä
+void SCREENNone::DoKeyWork(BYTE key)                                            //ï¿½wï¿½Lï¿½o,ï¿½iï¿½Óªï¿½ï¿½O0x80~0x98ï¿½ï¿½ï¿½ï¿½,5X5ï¿½ï¿½ï¿½ï¿½
 {
 try {
     switch (key) {
@@ -29,7 +29,7 @@ try {
 void SCREENNone::DisplayNone(void)
 {
 try {
-    if (smem.GetcFace()!=cNONE) {   //¤W­±¬O¬°¤FÁ×§K§@¶Ì¨Æ,¦]¬°timer·í¨S¦³¤H¨Ó«ö®É·|¤@ª½¨Órefresh¤@¦¸
+    if (smem.GetcFace()!=cNONE) {   //ï¿½Wï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Fï¿½×§Kï¿½@ï¿½Ì¨ï¿½,ï¿½]ï¿½ï¿½timerï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Hï¿½Ó«ï¿½ï¿½É·|ï¿½@ï¿½ï¿½ï¿½ï¿½refreshï¿½@ï¿½ï¿½
         smem.SetcFace(cNONE);
         lcd240x128.DISPLAY_GRAPHIC(0,noneBitmap,128,30);
     }

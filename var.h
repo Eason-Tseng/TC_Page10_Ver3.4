@@ -482,6 +482,7 @@ typedef struct sRevSyncStatus {
 #define cACTUATEARWENSTATUS 410
 
 #define cNETMASKSET         411
+#define cGREENCONFLICTRECORD 412
 
 //smem.vSetACK_W2W / smem.vGetACK_W2W
 #define cTCToCenter          0

@@ -183,6 +183,7 @@ public:
 
 
     bool vWriteMsgToDOM(char *);
+    bool vWriteGreenConflictToDOM(char *);   //Eason20200131
     bool vWriteReverseLog(char *);      //jacky20140507
 
     bool vSaveLastAliveStatus();                                             //??SS?_?u??A??interval????????toDOM

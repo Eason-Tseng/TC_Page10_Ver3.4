@@ -5,10 +5,11 @@
 class PDEVICETRAFFICLIGHT
 {
     public:
-
+        unsigned char returnnum[3]; //Hi = 第幾燈卡 (1~6), Lo = 方向 (1 = 左轉,2 = 直行,3 = 圓綠)
         PDEVICETRAFFICLIGHT(void);
         ~PDEVICETRAFFICLIGHT(void);
-        bool DoWorkViaPDevice(MESSAGEOK);                                       //�ھ�PDevice�Ӫ��ʥ]�@�Ʊ�
+        bool DoWorkViaPDevice(MESSAGEOK);                             
+        void GreenConflictcode(BYTE, BYTE, BYTE); //Eason20200205
 
     private:
         int iAskW77E58CounterReturn;

@@ -17,6 +17,7 @@
 #include "SCREENOperStat.h"
 #include "screenActuateArwenStatus.h"
 #include "screenReverseMenu.h"
+#include "screenGreenConflictRecord.h"
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -418,10 +419,13 @@ void *intervalTimer::PTime(void *arg) {
                 screenCurrentLightStatus.DisplayDynSegStatus();
               } else if (tempFace == cCHAINSTATUS)
                 screenChainStatus.vRefreshChainStatusData();
-              else if (tempFace == cOPERSTAT)
-                screenOperStat.vShowGreenConflict();
+              // else if (tempFace == cOPERSTAT)   //Eason20200210
+                // screenOperStat.vShowGreenConflict();
               else if (tempFace == cREVERSETIMTMENU)
                 screenReverseMenu.vRefreshStepSec();
+                else if (tempFace == cGREENCONFLICTRECORD)
+                screenGreenConflictRecord.vShowGreenConflictRecord();
+                
 //                                  else if (tempFace == cACTUATEARWENSTATUS) screenActuateArwenStatus.vRefreshEverySec();
               screenActuateArwenStatus.vRefreshEverySec();
 //Remove vSend92VD_6F02

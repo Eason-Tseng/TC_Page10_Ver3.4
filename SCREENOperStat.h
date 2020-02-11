@@ -10,7 +10,7 @@ class SCREENOperStat:public SCREEN
         ~SCREENOperStat(void);
 
         void DisplayOperStat(void);
-        void DoKeyWork(BYTE);                                                   //®Ú¾ÚKEYªº­È§@¨Æ
+        void DoKeyWork(BYTE);                                                   //ï¿½Ú¾ï¿½KEYï¿½ï¿½ï¿½È§@ï¿½ï¿½
 
         void vShowGPSTime(time_t);
         void vShowMachineLocation(void);
@@ -18,22 +18,23 @@ class SCREENOperStat:public SCREEN
         void vShowGreenConflict(void);
 
     private:
-        BYTE operStatBitmap[3840];                                              //©³¹Ï
+        BYTE operStatBitmap[3840];                                              //ï¿½ï¿½ï¿½ï¿½
 
-        void LoadBitmapFromFile(void);                                          //±N©³¹ÏLoad¶i°O¾ÐÅé
+        void LoadBitmapFromFile(void);                                          //ï¿½Nï¿½ï¿½ï¿½ï¿½Loadï¿½iï¿½Oï¿½ï¿½ï¿½ï¿½
 
+        void DoKeyAWork();
         void DoKeyF1Work();
         void DoKeyF2Work();
         void DoKeyF3Work();
         void DoKeyF4Work();
         void DoKeyEnterWork();
 
-        DISP_WORD dateWord[8];                                                    //Åã¥Ü¤é´Áªº¦ì¸m
-        DISP_WORD timeWord[6];                                                    //Åã¥Ü®É¶¡ªº¦ì¸m
+        DISP_WORD dateWord[8];                                                    //ï¿½ï¿½Ü¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m
+        DISP_WORD timeWord[6];                                                    //ï¿½ï¿½Ü®É¶ï¿½ï¿½ï¿½ï¿½ï¿½m
         DISP_WORD GreenConflictWord[6];
         DISP_WORD HWStatusWord[4];
         DISP_WORD MachineLocationWord;
-        void InitDispWord(void);                                                  //ªì©l¤ÆªÅ¥Õ¦ì¸m
+        void InitDispWord(void);                                                  //ï¿½ï¿½lï¿½ÆªÅ¥Õ¦ï¿½m
 };
 //---------------------------------------------------------------------------
 extern SCREENOperStat screenOperStat;

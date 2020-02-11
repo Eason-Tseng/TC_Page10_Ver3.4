@@ -9048,7 +9048,7 @@ unsigned short int CSTC::vGetStepTime(void) {
     //Should be mutex
 
     unsigned short int time_difference = 0;
- if(_current_strategy==STRATEGY_MANUAL||_current_strategy==STRATEGY_FLASH||_current_strategy==STRATEGY_ALLRED || _current_strategy==STRATEGY_ALLDYNAMIC){
+ if(_current_strategy==STRATEGY_MANUAL||_current_strategy==STRATEGY_FLASH||_current_strategy==STRATEGY_ALLRED/* || _current_strategy==STRATEGY_ALLDYNAMIC*/){
 
       timespec strategy_current_time = {0, 0};
       if (clock_gettime(CLOCK_REALTIME, &strategy_current_time) < 0)
@@ -9061,10 +9061,12 @@ unsigned short int CSTC::vGetStepTime(void) {
         timer_gettime(_timer_plan, &_itimer_plan);
         time_difference = (_itimer_plan.it_value.tv_sec) + 1;
       }
-    }
+      if (_current_strategy == STRATEGY_ALLDYNAMIC)
+      time_difference = _intervalTimer.vGetEffectTime() + 1;
 
     return time_difference;
 
+    }
   }
   catch (...) {}
 }

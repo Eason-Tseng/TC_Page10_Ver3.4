@@ -113,6 +113,7 @@
 #include "screenRailwayChainSet.h"
 
 #include "screenActuateArwenStatus.h"
+#include "screenGreenConflictRecord.h"  //Eason20200203
 
 /*OTCombo0714*/
 #include "CDataToMessageOK.h"
@@ -796,6 +797,10 @@ try {
 
             case cACTUATEARWENSTATUS:
                   screenActuateArwenStatus.doKeyWork(key);
+            break;
+
+            case cGREENCONFLICTRECORD:    //Eason20200203
+                 screenGreenConflictRecord.DoKeyWork(key);
             break;
 
 

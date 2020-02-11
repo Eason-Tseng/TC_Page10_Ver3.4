@@ -120,9 +120,25 @@ try {
     bTCSegmentTypeUpdate = false;
     ucCSTCControlStrategy = 10; //TOD
 
-    iFirmwareYear = 2018; //控制器韌體版本時間 年
-    iFirmwareMonth = 03; //控制器韌體版本時間 月
-    iFirmwareDay = 23; //控制器韌體版本時間 日
+    iFirmwareYear = 2020; //控制器韌體版本時間 年
+    iFirmwareMonth = 02; //控制器韌體版本時間 月
+    iFirmwareDay = 02; //控制器韌體版本時間 日
+
+    //here select ICOP & ARBOR
+    iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
+//    iFirmwareFirstVersion = 6;
+    // iFirmwareSecondVersion = ucMBType;//控制器韌體版本Lo位元
+    iFirmwareSecondVersion = 3;//控制器韌體版本Lo位元
+
+    // iFirmwareYear = 2018; //控制器韌體版本時間 年
+    // iFirmwareMonth = 03; //控制器韌體版本時間 月
+    // iFirmwareDay = 23; //控制器韌體版本時間 日
+
+//     //here select ICOP & ARBOR
+//     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
+// //    iFirmwareFirstVersion = 6;
+//     // iFirmwareSecondVersion = ucMBType;//控制器韌體版本Lo位元
+//     iFirmwareSecondVersion = 2;//控制器韌體版本Lo位元
 
     //20140415, add dynamic seg for HsinChu dynamic control.
     //20140211, add special version for SIPA ped.
@@ -165,10 +181,7 @@ try {
   //990726 -> redcount?
     iFirmwareCompanyID = 0x00;
 
-//here select ICOP & ARBOR
-    iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
-//    iFirmwareFirstVersion = 6;
-    iFirmwareSecondVersion = ucMBType;//控制器韌體版本Lo位元
+
 
 /*
 enum ControlStrategy{
@@ -1549,6 +1562,16 @@ try {
       char temp[300] = { 0 };
       strcpy(temp,cString);
       disk.vWriteMsgToFile(temp);
+      return true;
+    } catch(...) {}
+}
+//------------------------Eason20200131----------------------------------------------
+bool SMEM::vWriteGreenConflictToDOM(char *cString)
+{
+try {
+      char temp[300] = { 0 };
+      strcpy(temp,cString);
+      disk.vWriteGreenConflictToFile(temp);
       return true;
     } catch(...) {}
 }

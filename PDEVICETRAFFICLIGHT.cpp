@@ -48,11 +48,18 @@ try {
 //move to stc.vGetLCX405ControlPower()              smem.vSetUCData(TC_Redcount_Display_Enable, 1);
             break;
 
-            case 0x45:                                                          //GreenColfiect
+            case 0x45:                                                          //GreenColfiect  //Eason20200131
               sprintf(cTMP, "Get GreenColfiect:%02X,%02X,%02X", message.packet[3], message.packet[4], message.packet[5]);
               smem.vWriteMsgToDOM(cTMP);
-              printf("%s\n", cTMP);
-              smem.vSetBOOLData(TC_SignalConflictError, true);
+              char iTMP[128];
+              GreenConflictcode(message.packet[3],message.packet[4],message.packet[5]);
+              sprintf(iTMP,"%02X%02X%02X",returnnum[0],returnnum[1],returnnum[2]);
+              if(message.packet[3]==0x00 && message.packet[4]==0x00 && message.packet[5]==0x00){}
+              else
+              {
+                smem.vWriteGreenConflictToDOM(iTMP);
+                smem.vSetBOOLData(TC_SignalConflictError, true);
+              }
               smem.vSetSignalConflictErrorVar(message.packet[3], message.packet[4], message.packet[5]);
 
               //OT980420, let redcount display close.
@@ -169,4 +176,36 @@ try{
     smem.vSetUCData(TC_Redcount_Display_Enable, 0);
 } catch (...) {}
 }
-
+//-------------------Eason20200205--------------------------------------------------------
+void PDEVICETRAFFICLIGHT::GreenConflictcode(BYTE GC0,BYTE GC1, BYTE GC2) //for 綠衝突歷史紀錄頁面
+{
+  try
+  {
+    int i = 0;
+    bool Switch = true;
+    if(GC0-0x80 >= 0 && Switch) {returnnum[i] = 0x32; GC0 = GC0-0x80;   (i>=2) ? (Switch = false) : i++;} //第三燈卡直行
+    if(GC0-0x40 >= 0 && Switch) {returnnum[i] = 0x31; GC0 = GC0-0x40;   (i>=2) ? (Switch = false) : i++;} //第三燈卡左轉
+    if(GC0-0x20 >= 0 && Switch) {returnnum[i] = 0x23; GC0 = GC0-0x20;   (i>=2) ? (Switch = false) : i++;} //第二燈卡圓綠
+    if(GC0-0x10 >= 0 && Switch) {returnnum[i] = 0x22; GC0 = GC0-0x10;   (i>=2) ? (Switch = false) : i++;} //第二燈卡直行
+    if(GC0-0x08 >= 0 && Switch) {returnnum[i] = 0x21; GC0 = GC0-0x08;   (i>=2) ? (Switch = false) : i++;} //第二燈卡左轉
+    if(GC0-0x04 >= 0 && Switch) {returnnum[i] = 0x13; GC0 = GC0-0x04;   (i>=2) ? (Switch = false) : i++;} //第一燈卡圓綠
+    if(GC0-0x02 >= 0 && Switch) {returnnum[i] = 0x12; GC0 = GC0-0x02;   (i>=2) ? (Switch = false) : i++;} //第一燈卡直行
+    if(GC0-0x01 == 0 && Switch) {returnnum[i] = 0x11; GC0 = GC0-0x01;   (i>=2) ? (Switch = false) : i++;} //第一燈卡左轉
+    if(GC1-0x80 >= 0 && Switch) {returnnum[i] = 0x61; GC1 = GC1-0x80;   (i>=2) ? (Switch = false) : i++;} //第六燈卡左轉
+    if(GC1-0x40 >= 0 && Switch) {returnnum[i] = 0x53; GC1 = GC1-0x40;   (i>=2) ? (Switch = false) : i++;} //第五燈卡圓綠
+    if(GC1-0x20 >= 0 && Switch) {returnnum[i] = 0x52; GC1 = GC1-0x20;   (i>=2) ? (Switch = false) : i++;} //第五燈卡直行
+    if(GC1-0x10 >= 0 && Switch) {returnnum[i] = 0x51; GC1 = GC1-0x10;   (i>=2) ? (Switch = false) : i++;} //第五燈卡左轉
+    if(GC1-0x08 >= 0 && Switch) {returnnum[i] = 0x43; GC1 = GC1-0x08;   (i>=2) ? (Switch = false) : i++;} //第四燈卡圓綠
+    if(GC1-0x04 >= 0 && Switch) {returnnum[i] = 0x42; GC1 = GC1-0x04;   (i>=2) ? (Switch = false) : i++;} //第四燈卡直行
+    if(GC1-0x02 >= 0 && Switch) {returnnum[i] = 0x41; GC1 = GC1-0x02;   (i>=2) ? (Switch = false) : i++;} //第四燈卡左轉
+    if(GC1-0x01 == 0 && Switch) {returnnum[i] = 0x33; GC1 = GC1-0x01;   (i>=2) ? (Switch = false) : i++;} //第三燈卡圓綠
+    if(GC2-0x02 >= 0 && Switch) {returnnum[i] = 0x63; GC2 = GC2-0x02;   (i>=2) ? (Switch = false) : i++;} //第六燈卡圓綠
+    if(GC2-0x01 == 0 && Switch) {returnnum[i] = 0x62; GC2 = GC2-0x01;   (i>=2) ? (Switch = false) : i++;} //第六燈卡直行
+    
+    for (int i = 0; i < 3; i++)
+    {
+      printf("point%d = %02X\n",i,returnnum[i]);  
+    }
+    
+  } catch (...) {}
+}

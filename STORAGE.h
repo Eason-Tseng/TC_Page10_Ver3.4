@@ -16,11 +16,11 @@ class STORAGE:public IODEVICE
         STORAGE(void);
         ~STORAGE(void);
 
-        bool OpenFile(char *,int);                                              //¶}ÀÉ
-        bool CloseFile(void);                                                   //ÃöÀÉ
-        bool ReadFile(void);                                                    //ÅªÀÉ
-        bool WriteFile(void);                                                   //¼gÀÉ
-        bool WriteReturn(void);                                                 //¼g´«¦æ
+        bool OpenFile(char *,int);                                              //ï¿½}ï¿½ï¿½
+        bool CloseFile(void);                                                   //ï¿½ï¿½ï¿½ï¿½
+        bool ReadFile(void);                                                    //Åªï¿½ï¿½
+        bool WriteFile(void);                                                   //ï¿½gï¿½ï¿½
+        bool WriteReturn(void);                                                 //ï¿½gï¿½ï¿½ï¿½ï¿½
 
         bool WriteSSSettingFile(short int,int,int);
         bool ReadSSSettingFile(short int *,int *,int *);
@@ -36,7 +36,7 @@ class STORAGE:public IODEVICE
                                       char *,
                                       int,
                                       unsigned char,
-                                      int *,                           //°»´ú¾¹»P±±¨î¾¹¨®¹D¹ïÀ³
+                                      int *,                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½î¾¹ï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½ï¿½
                                       int,
                                       unsigned short int *,
                                       //OT Pass
@@ -111,6 +111,7 @@ class STORAGE:public IODEVICE
          bool vWriteShareMEMALLFile(char *);
 
          bool vWriteMsgToFile(char *);
+         bool vWriteGreenConflictToFile(char *);   //Eason20200131
          bool vWriteReverseLog(char *);     //jacky20140507
 
          bool vWriteLastAliveTimeStampFile(time_t);                    //when SS disconnect, use this function to save time
@@ -152,7 +153,7 @@ class STORAGE:public IODEVICE
 
 
     private:
-        pthread_mutex_t mutexDisk;                                              //«OÅ@°O¾ÐÅé
+        pthread_mutex_t mutexDisk;                                              //ï¿½Oï¿½@ï¿½Oï¿½ï¿½ï¿½ï¿½
 
         char nowOpen[64];
         FILE *fileD;
