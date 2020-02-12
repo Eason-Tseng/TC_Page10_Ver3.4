@@ -48,7 +48,7 @@ try {
 //move to stc.vGetLCX405ControlPower()              smem.vSetUCData(TC_Redcount_Display_Enable, 1);
             break;
 
-            case 0x45:                                                          //GreenColfiect  //Eason20200131
+            case 0x45:                                                          //GreenColfiect  //Eason_Ver3.4
               sprintf(cTMP, "Get GreenColfiect:%02X,%02X,%02X", message.packet[3], message.packet[4], message.packet[5]);
               smem.vWriteMsgToDOM(cTMP);
               char iTMP[128];
@@ -176,11 +176,12 @@ try{
     smem.vSetUCData(TC_Redcount_Display_Enable, 0);
 } catch (...) {}
 }
-//-------------------Eason20200205--------------------------------------------------------
+//-------------------Eason_Ver3.4--------------------------------------------------------
 void PDEVICETRAFFICLIGHT::GreenConflictcode(BYTE GC0,BYTE GC1, BYTE GC2) //for 綠衝突歷史紀錄頁面
 {
   try
   {
+    for (int i=0;i<3;i++) returnnum[i] = 0x00;
     int i = 0;
     bool Switch = true;
     if(GC0-0x80 >= 0 && Switch) {returnnum[i] = 0x32; GC0 = GC0-0x80;   (i>=2) ? (Switch = false) : i++;} //第三燈卡直行

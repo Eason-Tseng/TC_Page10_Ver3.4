@@ -419,7 +419,7 @@ void *intervalTimer::PTime(void *arg) {
                 screenCurrentLightStatus.DisplayDynSegStatus();
               } else if (tempFace == cCHAINSTATUS)
                 screenChainStatus.vRefreshChainStatusData();
-              // else if (tempFace == cOPERSTAT)   //Eason20200210
+              // else if (tempFace == cOPERSTAT)   //Eason_Ver3.4
                 // screenOperStat.vShowGreenConflict();
               else if (tempFace == cREVERSETIMTMENU)
                 screenReverseMenu.vRefreshStepSec();

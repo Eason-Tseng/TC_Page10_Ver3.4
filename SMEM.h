@@ -183,7 +183,7 @@ public:
 
 
     bool vWriteMsgToDOM(char *);
-    bool vWriteGreenConflictToDOM(char *);   //Eason20200131
+    bool vWriteGreenConflictToDOM(char *);   //Eason_Ver3.4
     bool vWriteReverseLog(char *);      //jacky20140507
 
     bool vSaveLastAliveStatus();                                             //??SS?_?u??A??interval????????toDOM
@@ -480,7 +480,7 @@ private:
 //OT Debug 0523
     bool bTC_ActuateTypeFunctionEnable;
     bool bSmemTC_CCT_In_LongTanu_ActuateType_Switch;                        //?s??S?O???, 1 cycle change execplan
-    bool bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch; //Eason20200117 add
+    bool bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch; //Eason_Ver3.3
     unsigned short int usiSmemTC_CCT_In_LongTanu_ActuateType_PlanID;                         //when actuating, change to this plan
     bool bActuateRunningFlag;
     unsigned char ucActuatePhaseExtend;                                     //trash

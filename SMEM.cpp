@@ -122,13 +122,15 @@ try {
 
     iFirmwareYear = 2020; //控制器韌體版本時間 年
     iFirmwareMonth = 02; //控制器韌體版本時間 月
-    iFirmwareDay = 02; //控制器韌體版本時間 日
-
-    //here select ICOP & ARBOR
+    iFirmwareDay = 11; //控制器韌體版本時間 日
     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
-//    iFirmwareFirstVersion = 6;
-    // iFirmwareSecondVersion = ucMBType;//控制器韌體版本Lo位元
-    iFirmwareSecondVersion = 3;//控制器韌體版本Lo位元
+    iFirmwareSecondVersion = 4;//控制器韌體版本Lo位元
+
+    // iFirmwareYear = 2020; //控制器韌體版本時間 年
+    // iFirmwareMonth = 02; //控制器韌體版本時間 月
+    // iFirmwareDay = 02; //控制器韌體版本時間 日
+    // iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
+    // iFirmwareSecondVersion = 3;//控制器韌體版本Lo位元
 
     // iFirmwareYear = 2018; //控制器韌體版本時間 年
     // iFirmwareMonth = 03; //控制器韌體版本時間 月
@@ -395,7 +397,7 @@ try {
     //OT20131225
     usiCCJHeartBeatCount = 0;
 
-    //Eason20191220
+    //Eason_Ver3.4
     for(int i = 0; i < 8; i++) {
       redcount_remainder[i] = 0;
     }
@@ -1565,7 +1567,7 @@ try {
       return true;
     } catch(...) {}
 }
-//------------------------Eason20200131----------------------------------------------
+//------------------------Eason_Ver3.4----------------------------------------------
 bool SMEM::vWriteGreenConflictToDOM(char *cString)
 {
 try {
@@ -2559,7 +2561,7 @@ try {
       pthread_mutex_unlock(&mutexSmem);
       break;
 
-    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason20200121 add
+    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason_Ver3.3
       pthread_mutex_lock(&mutexSmem);
       bRet = bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch;
       pthread_mutex_unlock(&mutexSmem);
@@ -2702,7 +2704,7 @@ try {
       pthread_mutex_unlock(&mutexSmem);
       break;
 
-    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason20200121 add
+    case(TC_CCT_In_LongTanu_ActuateType_comped_Switch)://Eason_Ver3.3
       pthread_mutex_lock(&mutexSmem);
       bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch = bTMP;
       pthread_mutex_unlock(&mutexSmem);
@@ -4967,7 +4969,7 @@ void SMEM::setDynStepEffectimeRenew(bool isRenewState)
 {
 DynStepEffectime_Renew_State=isRenewState;
 };
-//------------------Eason20191219-------------------------------------
+//------------------Eason_Ver3.4-------------------------------------
 bool SMEM::vSendPedAndRedCountEverySec(void)    // 每秒送聯嘉 紅燈倒數 行人倒數
 {
 try {
@@ -5140,7 +5142,7 @@ try {
     return true;
   } catch (...) {}
 }
-//---------Eason20191219---------------------------------------------
+//---------Eason_Ver3.4---------------------------------------------
 bool SMEM::vSetRedCountRemainder(unsigned short int usiRedTime[])
 {
 try {
@@ -5154,7 +5156,7 @@ try {
     return true;
   } catch (...) {}
 }
-//---------Eason20191219---------------------------------------------
+//---------Eason_Ver3.4---------------------------------------------
 bool SMEM::vSetPgRemainder(unsigned short int usiPgTime[])
 {
 try {
@@ -5168,7 +5170,7 @@ try {
     return true;
   } catch (...) {}
 }
-//---------Eason20191220---------------------------------------------
+//---------Eason_Ver3.4---------------------------------------------
 bool SMEM::vSetPrRemainder(unsigned short int usiPrTime[])
 {
 try {
@@ -5182,7 +5184,7 @@ try {
     return true;
   } catch (...) {}
 }
-//---------Eason20191220---------------------------------------------
+//---------Eason_Ver3.4---------------------------------------------
 bool SMEM::GreenmanManual(bool (*bCountIF)[5][8])
 {
 try {
@@ -5198,4 +5200,3 @@ try {
     return true;
   } catch (...) {}
 }
-//---------Eason20191220---------------------------------------------

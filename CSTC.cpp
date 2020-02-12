@@ -1580,7 +1580,7 @@ void *CSTC::_stc_thread_light_control_func(void *) {
 //==            printf( "TIMER: PLAN\n" );
               /******** lock mutex ********/
               pthread_mutex_lock(&CSTC::_stc_mutex);
-              if (_current_strategy == STRATEGY_TOD || _current_strategy == STRATEGY_AUTO_CADC || _current_strategy == STRATEGY_CADC) //Eason20200108 add  閃光轉三色前插入全紅3秒
+              if (_current_strategy == STRATEGY_TOD || _current_strategy == STRATEGY_AUTO_CADC || _current_strategy == STRATEGY_CADC) //Eason_Ver3.3 add  閃光轉三色前插入全紅3秒
               {
                 unsigned short planorderTem;
                 planorderTem = stc.vGetUSIData(CSTC_exec_plan_phase_order);//紀錄舊Plan order
@@ -2336,7 +2336,7 @@ void CSTC::ReSetExtendTimer() {
                     _exec_plan._shorten_cycle);
             break;
         }
-        if( _exec_phase_current_subphase_step==0 ) //Eason20200120 fix redcountdown sec not compen
+        if( _exec_phase_current_subphase_step==0 ) //Eason_Ver3.4 fix redcountdown sec not compen
         {
         CalculatePgCount();
         CalculatePrCount();
@@ -4374,7 +4374,7 @@ void CSTC::Lock_to_Determine_SegmentPlanPhase(void) {
     if (smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch))               //close ActuateType
     {
       smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch, false);
-      smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch,true); //Eason20200117 add
+      smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch,true); //Eason_Ver3.3
       SegmentTypeUpdate = true;
       PlanUpdate = true;
     }
@@ -4784,7 +4784,7 @@ void CSTC::CalculateCompensation_in_TOD(void) {
     if (smem.vGetThisCycleRunCCJPlan5F18() == true) {
       return;
     }
-    if(smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch)){ //Eason20200117 add
+    if(smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch)){ //Eason_Ver3.3
       return;
     }
 
@@ -6367,7 +6367,7 @@ void CSTC::CalculateAndSendRedCount(const short int diff) {
   }
   catch (...) {}
 }
-//------------------eason20191220------------------------------------------------------
+//------------------Eason_Ver3.4------------------------------------------------------
 void CSTC::CalculatePgCount(void) //OT20131221   //聯嘉 小綠人 using
 {
 try {
@@ -6544,7 +6544,7 @@ try {
 }
 catch(...){}
 }
-//------------------eason20191220------------------------------------------------------
+//------------------Eason_Ver3.4------------------------------------------------------
 void CSTC::CalculatePrCount(void) //jacky20141121   //聯嘉 小紅人 using
 {
 try {
@@ -6721,9 +6721,7 @@ try {
 }
 catch(...){}
 }
-//------------------eason20191220---------------------------
-//----------------------------------------------------------
-//OT990419
+//------------------Eason_Ver3.4---------------------------
 void CSTC::CalculateAndSendRedCountInDyn(const short int diff) {
   try {
 

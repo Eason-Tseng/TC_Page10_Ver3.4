@@ -4,7 +4,7 @@
 #include "SCREENCtlSetup.h"
 #include "LCD240x128.h"
 #include "SMEM.h"
-#include "screenGreenConflictRecord.h"  //Eason20200203
+#include "screenGreenConflictRecord.h"  //Eason_Ver3.4
 
 #include "SCREENMBSelect.h"
 #include "SCREENUart2.h"

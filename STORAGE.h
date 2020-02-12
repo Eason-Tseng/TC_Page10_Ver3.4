@@ -111,7 +111,7 @@ class STORAGE:public IODEVICE
          bool vWriteShareMEMALLFile(char *);
 
          bool vWriteMsgToFile(char *);
-         bool vWriteGreenConflictToFile(char *);   //Eason20200131
+         bool vWriteGreenConflictToFile(char *);   //Eason_Ver3.4
          bool vWriteReverseLog(char *);     //jacky20140507
 
          bool vWriteLastAliveTimeStampFile(time_t);                    //when SS disconnect, use this function to save time

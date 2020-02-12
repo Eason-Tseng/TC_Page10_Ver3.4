@@ -155,7 +155,7 @@ void SendRequestToKeypad(void);                                                 
 //OT Debug 0523
 #define TC_CCT_In_LongTanu_ActuateType_Switch 18
 #define TC_CCT_In_LongTanu_ActuateType_FunctionEnable 19
-#define TC_CCT_In_LongTanu_ActuateType_comped_Switch 22 //Eason20200117 add
+#define TC_CCT_In_LongTanu_ActuateType_comped_Switch 22 //Eason_Ver3.3
 
 //OT Debug Signal 951116
 #define TC_SIGNAL_NEXT_STEP_OK 20
@@ -333,7 +333,7 @@ typedef struct sRevSyncStatus {
 
 #define DEVICENSPREDCOUNT   139 
 #define DEVICEGREENMANCOUNT 140 
-#define DEVICEREDCOUNTVERTAICHUNG 141 //Eason20191220 台中版紅燈倒數
+#define DEVICEREDCOUNTVERTAICHUNG 141 //Eason_Ver3.4
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------   //?w?q?i????w
 #define PROTOCOLUNKNOW       200                                                //???M??????w

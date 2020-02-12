@@ -9,7 +9,7 @@ class PDEVICETRAFFICLIGHT
         PDEVICETRAFFICLIGHT(void);
         ~PDEVICETRAFFICLIGHT(void);
         bool DoWorkViaPDevice(MESSAGEOK);                             
-        void GreenConflictcode(BYTE, BYTE, BYTE); //Eason20200205
+        void GreenConflictcode(BYTE, BYTE, BYTE); //Eason_Ver3.4
 
     private:
         int iAskW77E58CounterReturn;
