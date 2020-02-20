@@ -45,7 +45,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=4;j<6;j++) //月
     {
-      GreenConflictWord[i][j].X=20+j*8;
+      GreenConflictWord[i][j].X=12+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -53,7 +53,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=6;j<8;j++) //日
     {
-      GreenConflictWord[i][j].X=36+j*8;
+      GreenConflictWord[i][j].X=20+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -61,7 +61,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=8;j<10;j++) //時
     {
-      GreenConflictWord[i][j].X=52+j*8;
+      GreenConflictWord[i][j].X=28+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -69,7 +69,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=10;j<12;j++) //分
     {
-      GreenConflictWord[i][j].X=68+j*8;
+      GreenConflictWord[i][j].X=36+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -77,7 +77,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=12;j<14;j++) //第一接點
     {
-      GreenConflictWord[i][j].X=84+j*8;
+      GreenConflictWord[i][j].X=58+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -85,7 +85,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=14;j<16;j++) //第二接點
     {
-      GreenConflictWord[i][j].X=92+j*8;
+      GreenConflictWord[i][j].X=74+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -93,7 +93,7 @@ void ScreenGreenConflictRecord::initDispWord(void)
 
     for (int j=16;j<18;j++) //第三接點
     {
-      GreenConflictWord[i][j].X=100+j*8;
+      GreenConflictWord[i][j].X=90+j*8;
       GreenConflictWord[i][j].Y=26+i*16;
       GreenConflictWord[i][j].width=8;  
       GreenConflictWord[i][j].height=16;
@@ -127,6 +127,7 @@ void ScreenGreenConflictRecord::DisplayGreenConflictRecord(void)
     {  
       smem.SetcFace(cGREENCONFLICTRECORD);
       lcd240x128.DISPLAY_GRAPHIC(0,GreenConflictRecordBitmap,128,30);
+      vShowGreenConflictRecord();
     }
   } catch (...) {}
 }
@@ -137,46 +138,50 @@ void ScreenGreenConflictRecord::vShowGreenConflictRecord(void)
   {
     FILE *fd;
     char buff[6][20];
-    fd=fopen("//cct//Data//SETTING//GreenConflict.txt","a+");
+    fd=fopen("//cct//Data//SETTING//GreenConflict.txt","r");
+    BYTE space[16]={0};
     
     if (fd) 
     {
-    fread(buff,120,1,fd); 
-    fclose(fd);
-    printf("%s \n",buff);
-    }
-    for(int i =0; i<6; i++)
-    {
-      for(int j = 0; j < 18; j++)
+      fread(buff,120,1,fd); 
+      fclose(fd);
+      printf("%s",buff);
+
+      for(int i =0; i<6; i++)
       {
-        if(buff[i][j] == '0') buff[i][j] = 0x00;
-        else if (buff[i][j] == '1') buff[i][j] = 0x01;
-        else if (buff[i][j] == '2') buff[i][j] = 0x02;
-        else if (buff[i][j] == '3') buff[i][j] = 0x03;
-        else if (buff[i][j] == '4') buff[i][j] = 0x04;
-        else if (buff[i][j] == '5') buff[i][j] = 0x05;
-        else if (buff[i][j] == '6') buff[i][j] = 0x06;
-        else if (buff[i][j] == '7') buff[i][j] = 0x07;
-        else if (buff[i][j] == '8') buff[i][j] = 0x08;
-        else if (buff[i][j] == '9') buff[i][j] = 0x09;
-        else buff[i][j] = 0x10;
-      }
-    }
-    BYTE space[16]={0};
-    for(int i=0; i<6; i++)   //第幾筆資料
-    {
-      for(int j = 0; j < 18; j++)   //每筆資料的數據
-      {
-        if(buff[i][j] == 0x10)
+        for(int j = 0; j < 18; j++)
         {
-          lcd240x128.DISPLAY_GRAPHIC_XY(GreenConflictWord[i][j].X,GreenConflictWord[i][j].Y,space,GreenConflictWord[i][j].height,GreenConflictWord[i][j].width/8);
+          if (buff[i][j] == '0') buff[i][j] = 0x00;
+          else if (buff[i][j] == '1') buff[i][j] = 0x01;
+          else if (buff[i][j] == '2') buff[i][j] = 0x02;
+          else if (buff[i][j] == '3') buff[i][j] = 0x03;
+          else if (buff[i][j] == '4') buff[i][j] = 0x04;
+          else if (buff[i][j] == '5') buff[i][j] = 0x05;
+          else if (buff[i][j] == '6') buff[i][j] = 0x06;
+          else if (buff[i][j] == '7') buff[i][j] = 0x07;
+          else if (buff[i][j] == '8') buff[i][j] = 0x08;
+          else if (buff[i][j] == '9') buff[i][j] = 0x09;
+          else buff[i][j] = 0x10;
+
+          if (buff[i][j] == 0x10) //空
+          {
+            for (int j =0;j<18; j++) //整列清空
+            lcd240x128.DISPLAY_GRAPHIC_XY(GreenConflictWord[i][j].X,GreenConflictWord[i][j].Y,space,GreenConflictWord[i][j].height,GreenConflictWord[i][j].width/8);
+            break;
+          }
+          else
+          {
+            lcd240x128.DISPLAY_GRAPHIC_XY(GreenConflictWord[i][j].X,GreenConflictWord[i][j].Y,word8x16[buff[i][j]],GreenConflictWord[i][j].height,GreenConflictWord[i][j].width/8);
+          } 
         }
-        else
-        {
-          lcd240x128.DISPLAY_GRAPHIC_XY(GreenConflictWord[i][j].X,GreenConflictWord[i][j].Y,word8x16[buff[i][j]],GreenConflictWord[i][j].height,GreenConflictWord[i][j].width/8);
-        }  
       }
-    }  
+    }
+    else //沒有資料 全部清空
+    {
+      for (int i =0;i<6; i++)
+        for (int j =0;j<18; j++)
+          lcd240x128.DISPLAY_GRAPHIC_XY(GreenConflictWord[i][j].X,GreenConflictWord[i][j].Y,space,GreenConflictWord[i][j].height,GreenConflictWord[i][j].width/8);
+    }
   } catch(...) {}
 }
 //---------------------------------------------------------------------------

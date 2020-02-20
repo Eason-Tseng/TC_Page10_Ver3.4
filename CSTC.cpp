@@ -128,6 +128,7 @@ bool CSTC::usiReverseLight_log = false;     //jacky20140507
 int CSTC::ReverseTimeLog = 100000;      //jacky20140507
 bool CSTC::reverselosstmp = false;      //jacky20140507
 bool CSTC::MinchunDynFlag = false;
+bool CSTC::_5f18_Debug_SW = false;
 int CSTC::_5f1c_already_passed_sec = 0;
 timespec CSTC::strategy_start_time = {0, 0};
 
@@ -3809,6 +3810,7 @@ void CSTC::Lock_to_Determine_SegmentPlanPhase(void) {
     int iExecSeg;
     unsigned char ucTmp;
     DATA_Bit _ControlStrategy;
+    // bool _5f18_Debug_SW = false;
 
     //OT20131225
     unsigned short int usiCCJ_HeartBeatCount;
@@ -4349,11 +4351,14 @@ void CSTC::Lock_to_Determine_SegmentPlanPhase(void) {
     if (_current_strategy != STRATEGY_FLASH
         || _current_strategy != STRATEGY_ALLRED) {
       if (_exec_phase._subphase_count !=
-          _exec_plan._subphase_count)             //ï¿½pï¿½Gphaseï¿½Pplanï¿½wï¿½qï¿½ï¿½ï¿½ï¿½Oï¿\uFFFDVï¿½Æ¤ï¿½ï¿½Pï¿½ï¿½
+          _exec_plan._subphase_count)             
       {
+        if(!CSTC::_5f18_Debug_SW) //Eason_Ver3.4
+        {
         smem.vSetBOOLData(TC92_SubPhaseOfPhasePlanIncorrent, true);
-        _exec_plan =
-            plan[FLASH_PLANID];                                          //ï¿½ï¿½{ï¿½O
+        _exec_plan = plan[FLASH_PLANID];             
+        printf("\nError!!! _exec_phase._subphase_count != _exec_plan._subphase_count\n");
+        }
       } else {
         if (smem.vGetBOOLData(TC92_SubPhaseOfPhasePlanIncorrent) == true) {
           smem.vSetBOOLData(TC92_SubPhaseOfPhasePlanIncorrent, false);
@@ -9045,26 +9050,24 @@ unsigned short int CSTC::vGetStepTime(void) {
 
     //Should be mutex
 
-    unsigned short int time_difference = 0;
- if(_current_strategy==STRATEGY_MANUAL||_current_strategy==STRATEGY_FLASH||_current_strategy==STRATEGY_ALLRED/* || _current_strategy==STRATEGY_ALLDYNAMIC*/){
-
-      timespec strategy_current_time = {0, 0};
-      if (clock_gettime(CLOCK_REALTIME, &strategy_current_time) < 0)
-        perror("Can not get current time");
-      time_difference =
-          (strategy_current_time.tv_sec - strategy_start_time.tv_sec)+1;
-    } else {
-      if (_exec_plan._planid != FLASH_PLANID
-          && _exec_plan._planid != ALLRED_PLANID) {
-        timer_gettime(_timer_plan, &_itimer_plan);
-        time_difference = (_itimer_plan.it_value.tv_sec) + 1;
-      }
-      if (_current_strategy == STRATEGY_ALLDYNAMIC)
-      time_difference = _intervalTimer.vGetEffectTime() + 1;
-
-    return time_difference;
-
+  unsigned short int time_difference=0;
+//  if(_current_strategy==STRATEGY_MANUAL||_current_strategy==STRATEGY_FLASH||_current_strategy==STRATEGY_ALLRED || _current_strategy==STRATEGY_ALLDYNAMIC){
+  if(_current_strategy==STRATEGY_MANUAL||_current_strategy==STRATEGY_FLASH||_current_strategy==STRATEGY_ALLRED) {
+    timespec strategy_current_time={0,0};
+    if(clock_gettime(CLOCK_REALTIME, &strategy_current_time)<0) perror("Can not get current time");
+    time_difference = (strategy_current_time.tv_sec - strategy_start_time.tv_sec);
+  }
+  else{
+    if(_exec_plan._planid!=FLASH_PLANID && _exec_plan._planid!=ALLRED_PLANID){
+      timer_gettime(_timer_plan,&_itimer_plan);
+      time_difference = (_itimer_plan.it_value.tv_sec) + 1;
     }
+  }
+
+  if(_current_strategy == STRATEGY_ALLDYNAMIC)
+    time_difference = _intervalTimer.vGetEffectTime();
+
+  return time_difference;
   }
   catch (...) {}
 }
@@ -11354,10 +11357,10 @@ void CSTC::vReportBF02CCTProtocalSendKaikinStep(void) {
   }
   catch (...) {}
 }
-int CSTC::get5F1CAlreadyPassedSec() {
+int CSTC::get5F1CAlreadyPassedSec() { //KaoChuy_Ver3.4
   return _5f1c_already_passed_sec;
 }
-void CSTC::count5F1C_AlreadyPassedSec() {
+void CSTC::count5F1C_AlreadyPassedSec() { //KaoChuy_Ver3.4
   try {
 
     if (stc.vGetUSIData(CSTC_exec_phase_current_subphase_step) == 0)
@@ -11366,10 +11369,10 @@ void CSTC::count5F1C_AlreadyPassedSec() {
 
   } catch (...) {}
 }
-bool CSTC::isMinchunDynFlag() {
+bool CSTC::isMinchunDynFlag() { //KaoChuy_Ver3.4
   return MinchunDynFlag;
 }
-void CSTC::setMinchunDynFlag(bool minchunDynFlag) {
+void CSTC::setMinchunDynFlag(bool minchunDynFlag) { //KaoChuy_Ver3.4
   MinchunDynFlag = minchunDynFlag;
 }
 

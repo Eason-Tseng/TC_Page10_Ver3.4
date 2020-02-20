@@ -379,7 +379,7 @@ void *intervalTimer::PTime(void *arg) {
           switch (VDrid) {
             case (10):
 
-              smem.vSendPedAndRedCountEverySec();   //台中版紅燈倒數
+              smem.vSendPedAndRedCountEverySec();   //Eason_Ver3.4
               //WatchDog
               printf(
                   "*********************************************************************\n");
@@ -1294,7 +1294,7 @@ void intervalTimer::Lock_to_Set_Next_Dyn_Step(void) {
   }
   catch (...) {}
 }
-bool intervalTimer::vAllDynamicMinchunCount(unsigned short int siTMP) {
+bool intervalTimer::vAllDynamicMinchunCount(unsigned short int siTMP) { //KaoChuy_Ver3.4
   try {
     _itMinchun.it_value.tv_sec = siTMP;
     /* ot add 960802 */
@@ -1308,7 +1308,7 @@ bool intervalTimer::vAllDynamicMinchunCount(unsigned short int siTMP) {
 }
 
 //----------------------------------------------------------
-unsigned short int intervalTimer::vGetEffectTime(void) {
+unsigned short int intervalTimer::vGetEffectTime(void) { //KaoChuy_Ver3.4
   try {
 
     //Should be mutex

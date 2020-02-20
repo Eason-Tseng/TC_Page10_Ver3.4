@@ -381,9 +381,10 @@ try {
 
 //                 }
 
-                 if (bSetResendFlag) {   
-                     smem.SetWaitMsg(packet[2],packet,length);
-                 }
+                //  if (bSetResendFlag) {   
+                //      smem.SetWaitMsg(packet[2],packet,length);
+                //  }
+
 
                  screenCurrentCommPacket.vRefreshCurrentScreenPacket(packet, length, "1");
 

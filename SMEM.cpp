@@ -125,6 +125,7 @@ try {
     iFirmwareDay = 11; //控制器韌體版本時間 日
     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
     iFirmwareSecondVersion = 4;//控制器韌體版本Lo位元
+    iFirmwareSecondVersion1 = 0x11;
 
     // iFirmwareYear = 2020; //控制器韌體版本時間 年
     // iFirmwareMonth = 02; //控制器韌體版本時間 月
@@ -2841,6 +2842,8 @@ try {
     case(5):
       iTmp = iFirmwareSecondVersion;
       break;
+    case(6):
+      iTmp = iFirmwareSecondVersion1;
   }
   pthread_mutex_unlock(&mutexSmem);
 

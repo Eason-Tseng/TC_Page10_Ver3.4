@@ -316,6 +316,7 @@ class CSTC {
   static int _5f1c_already_passed_sec;
   static bool MinchunDynFlag;
  public:
+  static bool _5f18_Debug_SW;
   static bool isMinchunDynFlag();
   static void setMinchunDynFlag(bool minchunDynFlag);
   static void ReSetStep(bool step_up);

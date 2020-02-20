@@ -24,7 +24,6 @@
 
 #include "CTIMER.h"
 
-bool switch_for_5F18 = false;
 
 //---------------------------------------------------------------------------
 PTRAFFIC92TC::PTRAFFIC92TC(void) {
@@ -182,7 +181,7 @@ bool PTRAFFIC92TC::DoWorkViaPTraffic92(MESSAGEOK message) {
 }
 
 //---------------------------------------------------------------------------
-bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) {
+bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) { //Eason_Ver3.4
   try {
     DATA_Bit _ControlStrategy;
     int EffectTime;
@@ -216,10 +215,13 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) {
       switch (_ControlStrategy.DBit)
       {
         case 0x01:
-            _intervalTimer.vAllDynamicToTODCount(10); //countdown 10 sec
-            _intervalTimer.vAllDynamicMinchunCount(10);
-            smem.vSet5F18EffectTime(10);
-            switch_for_5F18 = false;
+            _intervalTimer.vAllDynamicToTODCount(3); //countdown 3 sec
+            _intervalTimer.vAllDynamicMinchunCount(3);
+            smem.vSet5F18EffectTime(3);
+            // _intervalTimer.vAllDynamicToTODCount(_intervalTimer.vGetEffectTime());
+            // _intervalTimer.vAllDynamicMinchunCount(_intervalTimer.vGetEffectTime());
+            // smem.vSet5F18EffectTime(_intervalTimer.vGetEffectTime());
+            CSTC::_5f18_Debug_SW = false;
             stc.Lock_to_Load_Segment_for_Panel(stc.vGetUSIData(CSTC_exec_segment_current_seg_no));
             int Count = GetNowPlanOfSegtypeCount();
             smem.vSetINTData(TC92_PlanOneTime5F18_PlanID,stc._panel_segment._ptr_seg_exec_time[Count]._planid);
@@ -229,7 +231,7 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) {
           break;
 
         case 0x08:
-            switch_for_5F18 = true;
+            CSTC::_5f18_Debug_SW = true;
             smem.vSet5F18EffectTime(EffectTime);
             printf("Now 5F18 can change PlanID\n");
           break;
@@ -240,7 +242,7 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) {
               printf("Now is changing to ALLDYNAMIC\n\n");
               _intervalTimer.vAllDynamicToTODCount(stc.vGet5F10BootStepTime()); //set current Step time
               _intervalTimer.vAllDynamicMinchunCount(EffectTime); //set timer
-              switch_for_5F18 = false;
+              CSTC::_5f18_Debug_SW = false;
               printf("exec_planid=%d\n",stc.vGetUSIData(CSTC_exec_plan_plan_ID));
               printf("exec_planid=%d\n",stc.vGetUSIData(CSTC_exec_plan_plan_ID));
               printf("exec_planid=%d\n",stc.vGetUSIData(CSTC_exec_plan_plan_ID)); //Debug print
@@ -1968,7 +1970,7 @@ bool PTRAFFIC92TC::vQueryHolidaySegment5F47(MESSAGEOK DataMessageIn) {
 //---------------------------------------------------------------------------
 bool PTRAFFIC92TC::vWriteRunPlan5F18(MESSAGEOK DataMessageIn) {
   try {
-    if(switch_for_5F18){ 
+    if(CSTC::_5f18_Debug_SW){ 
     DATA_Bit _ControlStrategy;
     _ControlStrategy.DBit = smem.vGetUCData(TC92_ucControlStrategy);
     printf("[OTDebug] in 5F18, _ControlStrategy.DBit:%X\n",
@@ -1978,6 +1980,8 @@ bool PTRAFFIC92TC::vWriteRunPlan5F18(MESSAGEOK DataMessageIn) {
     unsigned int uiTimeOutPlan;
     int iSetPlanID = DataMessageIn.packet[9];
 
+
+
       if (DataMessageIn.packetLength < 13) {
         vReturnToCenterNACK(0x5F, 0x18, 0x08, 0x00);
         return false;
@@ -1985,12 +1989,18 @@ bool PTRAFFIC92TC::vWriteRunPlan5F18(MESSAGEOK DataMessageIn) {
         vReturnToCenterNACK(0x5F, 0x18, 0x08, DataMessageIn.packetLength - 12);
         return false;
       }
-      vReturnToCenterACK(0x5F, 0x18);
+      
 
       //OT1000310
       //OT20110729   if(_ControlStrategy.DBit == 0x02) {
   //OT20111107 if((_ControlStrategy.DBit & 0x02) > 0 ) {  //OT20110729
-      if (1)    //OT20111107
+
+      // FILE *iplan_ = NULL;
+      // char filename[22];
+      // sprintf(filename, "/Data/PlanInfo%d.bin\0", iSetPlanID);
+      // iplan_ = fopen(filename, "r"); //fopen return NULL if file not exist
+   
+      if (smem.vGetTCPhasePlanSegTypeData(TC_Plan,iSetPlanID))    //OT20111107
       {
         smem.vSetINTData(TC92_PlanOneTime5F18_PlanID, iSetPlanID);
 
@@ -2000,7 +2010,12 @@ bool PTRAFFIC92TC::vWriteRunPlan5F18(MESSAGEOK DataMessageIn) {
 
         printf("uiTimeOutPlan:%d\n", uiTimeOutPlan);
         printf("iSetPlanID:%d\n", iSetPlanID);
-
+        vReturnToCenterACK(0x5F, 0x18);
+      }
+      else
+      {
+        vReturnToCenterNACK(0x5F, 0x18, 0x08, 0x00);
+        return false;
       }
 
     }
@@ -2914,7 +2929,7 @@ bool PTRAFFIC92TC::vTransmitCycleQuery_5F6F(MESSAGEOK DataMessageIn) {
 
 
 //-------------------------------------------------------------------
-bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) {
+bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) { //Eason_Ver3.4
   try {
     printf("vGoToNextPhaseStepControl_5F1C\033[0;40;31m\n");
     printf("vGoToNextPhaseStepControl_5F1C\033[0;40;31m\n");

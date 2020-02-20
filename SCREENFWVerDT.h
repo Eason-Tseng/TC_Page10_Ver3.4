@@ -10,19 +10,20 @@ class SCREENFWVerDT:public SCREEN
         SCREENFWVerDT(void);
         ~SCREENFWVerDT(void);
 
-        void DisplayFWVerDT(void);                                              //Åã¥Ü
-        void DoKeyWork(BYTE);                                                   //®Ú¾ÚKEYªº­È§@¨Æ
+        void DisplayFWVerDT(void);                                              //ï¿½ï¿½ï¿½
+        void DoKeyWork(BYTE);                                                   //ï¿½Ú¾ï¿½KEYï¿½ï¿½ï¿½È§@ï¿½ï¿½
 
     private:
-        BYTE fwVerDTBitmap[3840];                                               //©³¹Ï
+        BYTE fwVerDTBitmap[3840];                                               //ï¿½ï¿½ï¿½ï¿½
 
-        DISP_WORD version[2];
+        // DISP_WORD version[2];
+        DISP_WORD version[3];
         DISP_WORD fwDate[8];
         DISP_WORD fwW77E58[6];
 
         void InitDispWord(void);
 
-        void LoadBitmapFromFile(void);                                          //±N©³¹ÏLoad¶i°O¾ÐÅé
+        void LoadBitmapFromFile(void);                                          //ï¿½Nï¿½ï¿½ï¿½ï¿½Loadï¿½iï¿½Oï¿½ï¿½ï¿½ï¿½
         void DoKeyF1Work(void);
         void DoKeyF2Work(void);
         void DoKeyF3Work(void);

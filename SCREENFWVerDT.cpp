@@ -68,9 +68,11 @@ try {
 
 
     unsigned short verHi=smem.vGetFirmwareInfo_0FC3(4),verLo=smem.vGetFirmwareInfo_0FC3(5);
+    unsigned char verLo1=smem.vGetFirmwareInfo_0FC3(6);
     if ( (verHi<=9) && (verLo<=9) ) {
         lcd240x128.DISPLAY_GRAPHIC_XY(version[0].X,version[0].Y,word8x16[verHi],version[0].height,version[0].width/8);
         lcd240x128.DISPLAY_GRAPHIC_XY(version[1].X,version[1].Y,word8x16[verLo],version[1].height,version[1].width/8);
+        // lcd240x128.DISPLAY_GRAPHIC_XY(version[2].X,version[2].Y,word8x16[verLo1],version[2].height,version[2].width/8);
     }
 
     unsigned short cYear=smem.vGetFirmwareInfo_0FC3(0),cMonth=smem.vGetFirmwareInfo_0FC3(1),cDay=smem.vGetFirmwareInfo_0FC3(2);
@@ -114,6 +116,10 @@ void SCREENFWVerDT::InitDispWord(void)
     version[1].Y=36;
     version[1].width=8;
     version[1].height=16;
+    version[2].X=136;
+    version[2].Y=36;
+    version[2].width=8;
+    version[2].height=16;
 
     for (int i=0;i<8;i++) {
          if (i>=0 && i<=3) fwDate[i].X=104+i*8;

@@ -444,6 +444,7 @@ private:
     int iFirmwareCompanyID;
     int iFirmwareFirstVersion;
     int iFirmwareSecondVersion;
+    int iFirmwareSecondVersion1;
 
     int iAdjudicateReturnAddressBCDorHEX;
 
