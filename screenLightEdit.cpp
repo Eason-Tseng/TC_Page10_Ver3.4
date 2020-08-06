@@ -753,7 +753,7 @@ void ScreenLightEdit::doKeyF3Work(void)
     stc._panel_phase._signal_map= ucSignalMap;
     stc._panel_phase._signal_count=ucSignalCount;
     stc._panel_phase._subphase_count=ucSubphaseCount;
-    stc._panel_phase._total_step_count = ucSubphaseCount * 5;  //¤­­Ó¨B¶¥
+    stc._panel_phase._total_step_count = ucSubphaseCount * 5;  //ï¿½ï¿½ï¿½Ó¨Bï¿½ï¿½
 
 
 
@@ -790,7 +790,7 @@ void ScreenLightEdit::doKeyF3Work(void)
 
     smem.vWriteMsgToDOM("WritePhaseByPanel");
 
-    stc.Lock_to_Save_Phase_from_Panel();             //Àx¦s¦^¥h
+    stc.Lock_to_Save_Phase_from_Panel();             //ï¿½xï¿½sï¿½^ï¿½h
     smem.vSetINTData(TC92_iUpdatePhaseData, 1);
     smem.vSetTCPhasePlanSegTypeData(TC_Phase, ucPhaseID, true);
     screenLightPreview.DisplayLightPreview(ucPhaseID, INVAILDVALUE);

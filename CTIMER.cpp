@@ -18,6 +18,7 @@
 #include "screenActuateArwenStatus.h"
 #include "screenReverseMenu.h"
 #include "screenGreenConflictRecord.h"
+#include "PTRAFFIC92TC.h"
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -355,6 +356,7 @@ void *intervalTimer::PTime(void *arg) {
 
 //OT20110526
     int iMinCycleTime;
+    bool iCS_Switch = true;
     unsigned char ucTmp;
     time_t currentTime;
     struct tm *now;
@@ -419,12 +421,12 @@ void *intervalTimer::PTime(void *arg) {
                 screenCurrentLightStatus.DisplayDynSegStatus();
               } else if (tempFace == cCHAINSTATUS)
                 screenChainStatus.vRefreshChainStatusData();
-              // else if (tempFace == cOPERSTAT)   //Eason_Ver3.4
-                // screenOperStat.vShowGreenConflict();
+              else if (tempFace == cOPERSTAT)   
+                screenOperStat.vShowGreenConflict();
               else if (tempFace == cREVERSETIMTMENU)
                 screenReverseMenu.vRefreshStepSec();
-                else if (tempFace == cGREENCONFLICTRECORD)
-                screenGreenConflictRecord.vShowGreenConflictRecord();
+                // else if (tempFace == cGREENCONFLICTRECORD)
+                // screenGreenConflictRecord.vShowGreenConflictRecord();
                 
 //                                  else if (tempFace == cACTUATEARWENSTATUS) screenActuateArwenStatus.vRefreshEverySec();
               screenActuateArwenStatus.vRefreshEverySec();
@@ -650,6 +652,36 @@ void *intervalTimer::PTime(void *arg) {
               } else {
                 smem.vSaveCenterConnectStatus(false);
               }
+              iMinCycleTime = (iMinCycleTime-2)*5;
+
+              tmpTime = smem.vGetLastGetProtocolTime();
+              printf("\ncurrentTime - tmpTime == %d\n",currentTime - tmpTime);
+              printf("\niMinCycleTime == %d\n",iMinCycleTime);
+              if (currentTime >= tmpTime
+                  && (currentTime - tmpTime) <= iMinCycleTime) {} 
+              else {
+                if(CSTC::Lock_to_LoadControlStrategy() == STRATEGY_ALLDYNAMIC && iCS_Switch == true)
+                {
+                  iCS_Switch = false;
+                  unsigned char data[6]={0};
+                  data[0] = 0x5F;
+                  data[1] = 0x10;
+                  data[2] = 0x01;
+                  data[3] = 0x00;
+                  MESSAGEOK _MSG;
+                  _MSG = oDataToMessageOK.vPackageINFOTo92Protocol(data, 4,false);
+                  _MSG.InnerOrOutWard=cInner;
+                  writeJob.WriteWorkByMESSAGEOUT(_MSG);
+                  printf("\n\niCS_Switch == %d \n\n",iCS_Switch);
+                  printf("\n\niCS_Switch == %d \n\n",iCS_Switch);
+                  printf("\n\niCS_Switch == %d \n\n",iCS_Switch);
+                }
+                else if (CSTC::Lock_to_LoadControlStrategy() == STRATEGY_TOD && iCS_Switch == false)
+                {
+                  iCS_Switch = true;
+                }
+              }
+                
 
               //OT20110825
               tmpTime = smem.vGetLastTrafficeLightTime();
@@ -754,6 +786,7 @@ void *intervalTimer::PTime(void *arg) {
                   printf("Lock_to_Set_Control_Strategy by Timer!!!\n");
 
                   stc.Lock_to_Set_Control_Strategy(STRATEGY_TOD);
+                  stc.Lock_to_Set_Next_Step_for_5f1001();
 
                   sprintf(msg,
                           "[Debug] Change to TOD at CTIMER.cpp, currentStep:%d",
@@ -772,7 +805,7 @@ void *intervalTimer::PTime(void *arg) {
                   smem.vSetINTData(TC92_iEffectTime, 0);
                 } else {
                   CSTC::Lock_to_Set_Next_Step();
-                  CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
+                  // CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
                 }
               }//if( stc.Lock_to_LoadControlStrategy() == STRATEGY_ALLDYNAMIC )
               printf(
@@ -1273,7 +1306,7 @@ bool intervalTimer::vAllDynamicToTODCount(unsigned short int siTMP) {
   try {
     _it9.it_value.tv_sec = siTMP;
     /* ot add 960802 */
-    _it9.it_value.tv_nsec = 0;
+    _it9.it_value.tv_nsec = 500;
     _it9.it_interval.tv_sec = 0;
     _it9.it_interval.tv_nsec = 0;
 
@@ -1321,6 +1354,21 @@ unsigned short int intervalTimer::vGetEffectTime(void) { //KaoChuy_Ver3.4
 
   } catch (...) {}
 }
+
+// //----------------------------------------------------------
+// unsigned int intervalTimer::vGetEffectTime_for_test(void) { //KaoChuy_Ver3.4
+//   try {
+
+//     //Should be mutex
+
+//     unsigned int time_difference = 0;
+//     timer_gettime(_t9, &_it9);
+//     time_difference = (_it9.it_value.tv_nsec);
+//     //專為銘將設計的方法，用來計算5f1c即時動態時制已經走過綠燈的時間
+//     return time_difference;
+
+//   } catch (...) {}
+// }
 
 
 //--------------------------------------------------------------------------

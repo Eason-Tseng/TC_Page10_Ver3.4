@@ -67,6 +67,7 @@ struct itimerspec CSTC::_itimer_reportcount;
 struct itimerspec CSTC::_itimer_record_traffic;
 struct itimerspec CSTC::_itimer_reversetime;
 struct itimerspec CSTC::_itimer_plan_WDT;
+struct itimerspec CSTC::_itimer_plan_test;
 
 #define LCN_NON_INITIALIZED_VALUE        9999
 #define PHASEORDER_NON_INITIALIZED_VALUE 9999
@@ -121,6 +122,7 @@ unsigned short int CSTC::_exec_segment_current_seg_no =
 
 unsigned short int CSTC::_exec_reversetime_current_rev_no = 0;
 unsigned short int CSTC::_exec_reversetime_current_rev_step = 0;
+unsigned short int CSTC::_5F03_Before_Timer = 0;
 
 unsigned short int CSTC::reverseloss = 0;   //jacky20140507
 unsigned short int CSTC::ReverseLight_log = 0x0;    //jacky20140507
@@ -1554,12 +1556,14 @@ void *CSTC::_stc_thread_light_control_func(void *) {
               || _current_strategy == STRATEGY_ALLDYNAMIC
               || uc5F10_ControlStrategy.DBit == 0x30)   //OT1000218
           {
-
+            unsigned short usiCurrentSubphaseStep = stc.vGetUSIData(CSTC_exec_phase_current_subphase_step);
             if (clock_gettime(CLOCK_REALTIME, &strategy_start_time) < 0)
               perror("Can not get strategy start time");
             ReSetStep(true);
+            Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
             ReSetExtendTimer();
             SetLightAfterExtendTimerReSet();
+            
 
             if (_current_strategy == STRATEGY_ALLDYNAMIC) {
               stc.vReportGoToNextPhaseStep_5F0C();
@@ -1583,58 +1587,59 @@ void *CSTC::_stc_thread_light_control_func(void *) {
               pthread_mutex_lock(&CSTC::_stc_mutex);
               if (_current_strategy == STRATEGY_TOD || _current_strategy == STRATEGY_AUTO_CADC || _current_strategy == STRATEGY_CADC) //Eason_Ver3.3 add  閃光轉三色前插入全紅3秒
               {
-                unsigned short planorderTem;
-                planorderTem = stc.vGetUSIData(CSTC_exec_plan_phase_order);//紀錄舊Plan order
+                // // // if(smem.vGetBOOLData(TCFlash_Chage_TOD_add_ALLRED3s) == true)
+                // // // {
+                //   unsigned short planorderTem;
+                //   planorderTem = stc.vGetUSIData(CSTC_exec_plan_phase_order);//紀錄舊Plan order
 
-                if((planorderTem == 0x80 || planorderTem == 0xB0) && smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch))//舊Plan order == 閃光 && 行人觸動
-                {
-                  AllRed5Seconds();
-                  _current_strategy = STRATEGY_TOD;
-                  _exec_phase._phase_order = 0xB0;
-                  _exec_phase_current_subphase = 0;
-                  _exec_phase_current_subphase_step = 0;
-                  // ReSetStep(true);
-                  SendRequestToKeypad();
-                  ReSetExtendTimer();
-                  SetLightAfterExtendTimerReSet();
-                  if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();         
-                }
-                else if(planorderTem == 0x80 || planorderTem == 0xB0)//舊Plan order == 閃光
-                {
-                  ReSetStep(true);
-                  if(planorderTem != stc.vGetUSIData(CSTC_exec_plan_phase_order))//新Plan order != 閃光
-                  {
-                    // printf("\n\n\n\n\n\nnow is add ALLRED 3sec test!!!\n\n\n\n\n");
-                    AllRed5Seconds();
-                    _current_strategy = STRATEGY_TOD;
-                    _exec_phase_current_subphase = 0;
-                    _exec_phase_current_subphase_step = 0;
-                    SendRequestToKeypad();
+                //   if((planorderTem == 0x80 || planorderTem == 0xB0) && smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_Switch))//舊Plan order == 閃光 && 行人觸動
+                //   {
+                //     AllRed5Seconds();
+                //     _current_strategy = STRATEGY_TOD;
+                //     _exec_phase._phase_order = 0xB0;
+                //     _exec_phase_current_subphase = 0;
+                //     // ReSetStep(true);
+                //     SendRequestToKeypad();
+                //     ReSetExtendTimer();
+                //     SetLightAfterExtendTimerReSet();
+                //     if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();         
+                //   }
+                //   else if(planorderTem == 0x80 || planorderTem == 0xB0)//舊Plan order == 閃光
+                //   {
+                //     ReSetStep(true);
+                //     if(planorderTem != stc.vGetUSIData(CSTC_exec_plan_phase_order))//新Plan order != 閃光
+                //     {
+                //       // printf("\n\n\n\n\n\nnow is add ALLRED 3sec test!!!\n\n\n\n\n");
+                //       AllRed5Seconds();
+                //       _current_strategy = STRATEGY_TOD;
+                //       _exec_phase_current_subphase = 0;
+                //       _exec_phase_current_subphase_step = 0;
+                //       SendRequestToKeypad();
+                //       ReSetExtendTimer();
+                //       SetLightAfterExtendTimerReSet();
+                //       if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();                                
+                //     }
+                //     else//新舊Plan order == 閃光
+                //     {
+                //       ReSetExtendTimer();
+                //       SetLightAfterExtendTimerReSet();
+                //       if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();
+                //     }
+                //   }
+                //   else
+                //   {
+                    ReSetStep(true);
                     ReSetExtendTimer();
                     SetLightAfterExtendTimerReSet();
-                    if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();                                
-                  }
-                  else//新舊Plan order == 閃光
-                  {
-                    ReSetExtendTimer();
-                    SetLightAfterExtendTimerReSet();
-                    if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();
-                  }
-                }
-                else
-                {
-                  ReSetStep(true);
-                  ReSetExtendTimer();
-                  SetLightAfterExtendTimerReSet();
-                  if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();     
-                }
-              }  
+                    if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF(); 
+                  // }
+              }
               /******** unlock mutex ********/
               pthread_mutex_unlock(&CSTC::_stc_mutex);
               break;
 
             case (1001):  //_timer_redcount
-//==            printf( "TIMER: REDCOUNT_TIMEOUT\n" );
+// ==            printf( "TIMER: REDCOUNT_TIMEOUT\n" );
 
 //            _intervalTimer.vSendHeartBeatToLCX405();  //let 8051 alive.
 //MaskTest            stc.vSendHeartBeatToLCX405inCSTC();  //let 8051 alive.
@@ -1826,12 +1831,16 @@ void *CSTC::_stc_thread_light_control_func(void *) {
 
 //==            printf( "TIMER: PLAN\n" );
 
-            ReSetStep(true);
+            // ReSetStep(true);
+            ReSetStep(false);
             ReSetExtendTimer();
             SetLightAfterExtendTimerReSet();
             if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) {
               vCheckPhaseForTFDActuateExtendTime_5FCF();
             }
+            char msg[256];
+            sprintf(msg,"in Plan WDT PlanID:%d ,Phase:%d ,Step:%d ,Plan_sec %d ,Plan_test_sec %d ,WDT_sec %d",_exec_plan._planid,stc.vGetUSIData(CSTC_exec_phase_current_subphase),stc.vGetUSIData(CSTC_exec_phase_current_subphase_step),_itimer_plan.it_value.tv_sec,_itimer_plan_test.it_value.tv_sec,_itimer_plan_WDT.it_value.tv_sec);
+            smem.vWriteMsgToDOM(msg);  
           } else {
             _itimer_plan_WDT.it_value.tv_sec =
                 0;                                 //default every 5 sec trigger.
@@ -1868,12 +1877,13 @@ void *CSTC::_stc_thread_light_control_func(void *) {
 }
 void CSTC::Dyn_to_TOD_Step_set(unsigned short currentSubphaseStep) {
 
-  usleep(50);
+  usleep(100);
+  // unsigned short currentSubPhase = stc.vGetUSIData(CSTC_exec_phase_current_subphase);
+  unsigned short oldstep = currentSubphaseStep;
+  currentSubphaseStep = stc.vGetUSIData(CSTC_exec_phase_current_subphase_step);
 
-  currentSubphaseStep =
-      stc.vGetUSIData(CSTC_exec_phase_current_subphase_step);
   if ((smem.minchun_Dyn_5F1C_reserve_value.isNew) &&
-      currentSubphaseStep == 0 &&
+      _exec_phase_current_subphase_step == 0 &&
       stc.vGetUSIData(CSTC_exec_phase_current_subphase)
           == smem.minchun_Dyn_5F1C_reserve_value.ReserveSubphase) {
     smem.minchun_Dyn_5F1C_reserve_value.isNew = false;
@@ -1884,23 +1894,25 @@ void CSTC::Dyn_to_TOD_Step_set(unsigned short currentSubphaseStep) {
 
   } else {
 
-    if (currentSubphaseStep == 0) {
-      _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(
-          CSTC_exec_plan_green_time));
-    } else if (currentSubphaseStep == 1)
-      _intervalTimer.vAllDynamicToTODCount(
-          stc.vGetUSIData(CSTC_exec_plan_pedgreenflash_time));
-    else if (currentSubphaseStep == 2) {
-      _intervalTimer.vAllDynamicToTODCount(
-          stc.vGetUSIData(CSTC_exec_plan_pedred_time));
-    } else if (currentSubphaseStep == 3)
-      _intervalTimer.vAllDynamicToTODCount(
-          stc.vGetUSIData(CSTC_exec_plan_yellow_time));
-    else if (currentSubphaseStep == 4)
-      _intervalTimer.vAllDynamicToTODCount(
-          stc.vGetUSIData(CSTC_exec_plan_allred_time));
-  }
+    if (oldstep == currentSubphaseStep) smem.vWriteMsgToDOM("currentSubphaseStep Error!!!");
+    // if (currentSubphaseStep == 0 && currentSubPhase == 0) smem.vWriteMsgToDOM("Phase 1 Setp 1 Start");
+    // if (currentSubphaseStep == 1 && currentSubPhase == 0) smem.vWriteMsgToDOM("Phase 1 Setp 2 Start");
+    // if (currentSubphaseStep == 2 && currentSubPhase == 0) smem.vWriteMsgToDOM("Phase 1 Setp 3 Start");
+    // if (currentSubphaseStep == 3 && currentSubPhase == 0) smem.vWriteMsgToDOM("Phase 1 Setp 4 Start");
+    // if (currentSubphaseStep == 4 && currentSubPhase == 0) smem.vWriteMsgToDOM("Phase 1 Setp 5 Start");
+    // if (currentSubphaseStep == 0 && currentSubPhase == 1) smem.vWriteMsgToDOM("Phase 2 Setp 1 Start");
+    // if (currentSubphaseStep == 1 && currentSubPhase == 1) smem.vWriteMsgToDOM("Phase 2 Setp 2 Start");
+    // if (currentSubphaseStep == 2 && currentSubPhase == 1) smem.vWriteMsgToDOM("Phase 2 Setp 3 Start");
+    // if (currentSubphaseStep == 3 && currentSubPhase == 1) smem.vWriteMsgToDOM("Phase 2 Setp 4 Start");
+    // if (currentSubphaseStep == 4 && currentSubPhase == 1) smem.vWriteMsgToDOM("Phase 2 Setp 5 Start");
 
+
+    if (currentSubphaseStep == 0)  _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(CSTC_exec_plan_green_time));
+    else if (currentSubphaseStep == 1) _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(CSTC_exec_plan_pedgreenflash_time));
+    else if (currentSubphaseStep == 2) _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(CSTC_exec_plan_pedred_time));
+    else if (currentSubphaseStep == 3) _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(CSTC_exec_plan_yellow_time));
+    else if (currentSubphaseStep == 4) _intervalTimer.vAllDynamicToTODCount(stc.vGetUSIData(CSTC_exec_plan_allred_time));
+  }
 }
 //----------------------------------------------------------
 //**********************************************************
@@ -2053,9 +2065,7 @@ void CSTC::ReSetStep(bool step_up) {
       bool CheckStepIndex = true;
       while (CheckStepIndex) {
         if (step_up) {
-          printf(
-              "step_up is True, current _exec_phase_current_subphase_step is %d, ",
-              _exec_phase_current_subphase_step);
+          printf("step_up is True, current _exec_phase_current_subphase_step is %d, ",_exec_phase_current_subphase_step);
           _exec_phase_current_subphase_step += 1; //go to next CheckStepIndex
           if (_exec_phase_current_subphase_step >=
               _exec_phase._ptr_subphase_step_count[_exec_phase_current_subphase]) {
@@ -2255,6 +2265,8 @@ void CSTC::ReSetExtendTimer() {
       if (_exec_plan._phase_order == FLASH_PHASEORDER
           || _exec_plan._phase_order == ALLRED_PHASEORDER) {
         _itimer_plan.it_value.tv_sec = 10;
+        _itimer_plan_test.it_value.tv_sec = 10;
+        _itimer_plan_WDT.it_value.tv_sec = 12;
       } else {
         if (_exec_phase_current_subphase == 0
             && _exec_phase_current_subphase_step == 0) {
@@ -2288,9 +2300,8 @@ void CSTC::ReSetExtendTimer() {
                    _exec_plan._shorten_cycle ? -1 : 1,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._green,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._green_compensation);
-            _itimer_plan.it_value.tv_sec =
-                _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_green(
-                    _exec_plan._shorten_cycle);
+          _itimer_plan.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_green(_exec_plan._shorten_cycle);
+          _itimer_plan_test.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_green(_exec_plan._shorten_cycle);
             break;
 
           case (1):
@@ -2299,9 +2310,8 @@ void CSTC::ReSetExtendTimer() {
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._pedgreen_flash,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._pedgreen_flash_compensation);
 
-            _itimer_plan.it_value.tv_sec =
-                _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedgreen_flash(
-                    _exec_plan._shorten_cycle);
+          _itimer_plan.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedgreen_flash(_exec_plan._shorten_cycle);
+          _itimer_plan_test.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedgreen_flash(_exec_plan._shorten_cycle);
             break;
 
           case (2):
@@ -2310,9 +2320,8 @@ void CSTC::ReSetExtendTimer() {
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._pedred,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._pedred_compensation);
 
-            _itimer_plan.it_value.tv_sec =
-                _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedred(
-                    _exec_plan._shorten_cycle);
+          _itimer_plan.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedred(_exec_plan._shorten_cycle);
+          _itimer_plan_test.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_pedred(_exec_plan._shorten_cycle);
             break;
 
           case (3):
@@ -2321,9 +2330,8 @@ void CSTC::ReSetExtendTimer() {
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._yellow,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._yellow_compensation);
 
-            _itimer_plan.it_value.tv_sec =
-                _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_yellow(
-                    _exec_plan._shorten_cycle);
+          _itimer_plan.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_yellow(_exec_plan._shorten_cycle);
+          _itimer_plan_test.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_yellow(_exec_plan._shorten_cycle);
             break;
 
           case (4):
@@ -2332,9 +2340,8 @@ void CSTC::ReSetExtendTimer() {
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._allred,
                    _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase]._allred_compensation);
 
-            _itimer_plan.it_value.tv_sec =
-                _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_allred(
-                    _exec_plan._shorten_cycle);
+          _itimer_plan.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_allred(_exec_plan._shorten_cycle);
+          _itimer_plan_test.it_value.tv_sec = _exec_plan._ptr_subplaninfo[_exec_phase_current_subphase].compensated_allred(_exec_plan._shorten_cycle);
             break;
         }
         if( _exec_phase_current_subphase_step==0 ) //Eason_Ver3.4 fix redcountdown sec not compen
@@ -2369,6 +2376,12 @@ void CSTC::ReSetExtendTimer() {
       _itimer_plan.it_interval.tv_sec = 0;
       _itimer_plan.it_interval.tv_nsec = 0;
 
+      _itimer_plan_test.it_value.tv_nsec = 0;
+      _itimer_plan_test.it_interval.tv_sec = 0;
+      _itimer_plan_test.it_interval.tv_nsec = 0;
+
+      _itimer_plan_WDT = _itimer_plan_test; /*OT_PLAN_WDT*/
+      _itimer_plan_WDT.it_value.tv_sec += 2;
       _itimer_plan_WDT.it_value.tv_nsec = 0;
       _itimer_plan_WDT.it_interval.tv_sec = 0;
       _itimer_plan_WDT.it_interval.tv_nsec = 0;
@@ -2377,13 +2390,13 @@ void CSTC::ReSetExtendTimer() {
       if (RESET_TIMER_BEFORE_SET_LIGHT) {
         for (int ii = 0; ii < 4; ii++) {
 
-          if (timer_settime(_timer_plan, 0, &_itimer_plan, NULL)) {
+          if (timer_settime(_timer_plan, 0, &_itimer_plan_test, NULL)) {
             printf("Settime Error!.\n");
             exit(1);
           }
 
-          _itimer_plan_WDT = _itimer_plan; /*OT_PLAN_WDT*/
-          _itimer_plan_WDT.it_value.tv_sec += 2;
+          // _itimer_plan_WDT = _itimer_plan; /*OT_PLAN_WDT*/
+          // _itimer_plan_WDT.it_value.tv_sec += 2;
           if (timer_settime(_timer_plan_WDT, 0, &_itimer_plan_WDT, NULL)) {
             printf("PlanWDT Settime Error!.\n");
             exit(1);
@@ -4790,6 +4803,7 @@ void CSTC::CalculateCompensation_in_TOD(void) {
       return;
     }
     if(smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch)){ //Eason_Ver3.3
+      smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch,false);
       return;
     }
 
@@ -5345,7 +5359,14 @@ void CSTC::ReportCurrentStepStatus(void)  //5F03
     //Should be mutex
 
     unsigned short int time_difference = vGetStepTime();
-
+    if (time_difference == _5F03_Before_Timer) 
+    {
+      // char msg[256];
+      // sprintf(msg,"5F03 is repeat sec %d",time_difference);
+      // smem.vWriteMsgToDOM(msg);
+      return;
+    }
+    _5F03_Before_Timer = time_difference;
     if (_timer_plan != NULL) {
 
 
@@ -5509,7 +5530,9 @@ void CSTC::ReportCurrentStepStatus(void)  //5F03
 
       /*-----------------*/
 //mallocFuck    free(data);
-
+// char msg[256];
+// sprintf(msg,"%d %d  %d:%d",data[5],data[6],data[8],_intervalTimer.vGetEffectTime_for_test());
+//   smem.vWriteMsgToDOM(msg);
     }
   }
   catch (...) {}
@@ -6401,7 +6424,9 @@ try {
     }
 
     iSubCnt = _exec_phase._subphase_count;
+    printf("\nNOW _exec_phase._subphase_count is %d\n",_exec_phase._subphase_count);
     iSignalCnt = _exec_phase._signal_count;
+    printf("\nNOW _exec_phase._signal_count is %d\n",_exec_phase._signal_count);
 
 //init. check val.
     for(int i = 0; i < 8; i++) {
@@ -6426,6 +6451,7 @@ try {
                     bCountIF[j][k][i] = true;
                 } else {
                     bCountIFEnable[i] = false;
+                    // printf("\nbCountIF[%d][%d][%d] = %d\n",j,k,i,bCountIFEnable[i]);
                 }
 
                 if(bCountIFEnable[i] == true && bCountIF[j][k][i] == true) {  //can add Pg Sec.
@@ -6448,6 +6474,7 @@ try {
                         default:
                           break;
                     }
+                    // printf("\nData[%d] == %d\n",i,Data[i]);
                 }
             }
             iSubCalCntTmp++;
@@ -6462,7 +6489,7 @@ try {
       _exec_plan._phase_order == FLASH_PHASEORDER_HSINCHU2 ||
       _current_strategy==STRATEGY_MANUAL ||
       _current_strategy==STRATEGY_ALLDYNAMIC ||
-      _exec_plan._phase_order ==0xB1 || _exec_plan._phase_order ==0xB0) {//arwen++ 1001206
+      /*_exec_plan._phase_order ==0xB1 ||*/ _exec_plan._phase_order ==0xB0) {//arwen++ 1001206
         for(int i = 0; i < 8; i++) {
           Data[i] = 0;
         }
@@ -11375,4 +11402,10 @@ bool CSTC::isMinchunDynFlag() { //KaoChuy_Ver3.4
 void CSTC::setMinchunDynFlag(bool minchunDynFlag) { //KaoChuy_Ver3.4
   MinchunDynFlag = minchunDynFlag;
 }
-
+//---------------------------------------------------------------------
+void CSTC::Lock_to_Set_Next_Step_for_5f1001() {
+  ReSetStep(true);
+  ReSetExtendTimer();
+  SetLightAfterExtendTimerReSet();
+  if (smem.vGetBOOLData(TC_CCTActuate_TOD_Running) == true) vCheckPhaseForTFDActuateExtendTime_5FCF();
+}

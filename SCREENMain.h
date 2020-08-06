@@ -10,20 +10,20 @@ class SCREENMain:public SCREEN
       SCREENMain(void);
       ~SCREENMain(void);
 
-      void DisplayMain(void);                                                   //Åã¥ÜMAIN­¶
-      void DoKeyWork(BYTE);                                                     //®Ú¾ÚKEYªº­È§@¨Æ
+      void DisplayMain(void);                                                   //ï¿½ï¿½ï¿½MAINï¿½ï¿½
+      void DoKeyWork(BYTE);                                                     //ï¿½Ú¾ï¿½KEYï¿½ï¿½ï¿½È§@ï¿½ï¿½
       void DisplayDateTime(void);
 
     private:
 
-      DISP_WORD dateWord[8];                                                    //Åã¥Ü¤é´Áªº¦ì¸m
-      DISP_WORD timeWord[6];                                                    //Åã¥Ü®É¶¡ªº¦ì¸m
-      DISP_WORD mark[10];                                                        //Åã¥Ü´å¼Ðªº¦ì¸m
-      int cSelect;                                                              //²{¦b¿ï¾Üªº¿ï¶µ
+      DISP_WORD dateWord[8];                                                    //ï¿½ï¿½Ü¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m
+      DISP_WORD timeWord[6];                                                    //ï¿½ï¿½Ü®É¶ï¿½ï¿½ï¿½ï¿½ï¿½m
+      DISP_WORD mark[10];                                                        //ï¿½ï¿½Ü´ï¿½Ðªï¿½ï¿½ï¿½m
+      int cSelect;                                                              //ï¿½{ï¿½bï¿½ï¿½Üªï¿½ï¿½ï¶µ
 
-      BYTE mainBitmap[3840];                                                    //©³¹Ï
-      void LoadBitmapFromFile(void);                                            //±N©³¹ÏLoad¶i°O¾ÐÅé
-      void InitDispWord(void);                                                  //ªì©l¤ÆªÅ¥Õ¦ì¸m
+      BYTE mainBitmap[3840];                                                    //ï¿½ï¿½ï¿½ï¿½
+      void LoadBitmapFromFile(void);                                            //ï¿½Nï¿½ï¿½ï¿½ï¿½Loadï¿½iï¿½Oï¿½ï¿½ï¿½ï¿½
+      void InitDispWord(void);                                                  //ï¿½ï¿½lï¿½ÆªÅ¥Õ¦ï¿½m
 
       void DoKey0Work(void);
       void DoKey1Work(void);
@@ -35,6 +35,7 @@ class SCREENMain:public SCREEN
       void DoKey7Work(void);
       void DoKey8Work(void);
       void DoKey9Work(void);
+      void DoKeyAWork(void);
 
       void DoKeyF1Work(void);
       void DoKeyF2Work(void);

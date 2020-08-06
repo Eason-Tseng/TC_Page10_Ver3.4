@@ -19,6 +19,7 @@ typedef struct MESSAGEWAITREPONSE
 typedef struct Minchun_Dyn_5F1C_record
 {
     bool isNew;//record 5F1c reserve change step second
+    bool DoubleCheck;
     int ReserveSubphase;
     int ReserveStep;
     int ReserveSec;
@@ -480,6 +481,7 @@ private:
 
 //OT Debug 0523
     bool bTC_ActuateTypeFunctionEnable;
+    bool bTC_Flash_Chage_TOD_add_ALLRED3s_Enable;
     bool bSmemTC_CCT_In_LongTanu_ActuateType_Switch;                        //?s??S?O???, 1 cycle change execplan
     bool bSmemTC_CCT_In_LongTanu_ActuateType_comped_Switch; //Eason_Ver3.3
     unsigned short int usiSmemTC_CCT_In_LongTanu_ActuateType_PlanID;                         //when actuating, change to this plan

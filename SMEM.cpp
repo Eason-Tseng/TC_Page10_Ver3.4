@@ -121,8 +121,8 @@ try {
     ucCSTCControlStrategy = 10; //TOD
 
     iFirmwareYear = 2020; //控制器韌體版本時間 年
-    iFirmwareMonth = 02; //控制器韌體版本時間 月
-    iFirmwareDay = 11; //控制器韌體版本時間 日
+    iFirmwareMonth = 8; //控制器韌體版本時間 月
+    iFirmwareDay = 12; //控制器韌體版本時間 日
     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
     iFirmwareSecondVersion = 4;//控制器韌體版本Lo位元
     iFirmwareSecondVersion1 = 0x11;
@@ -308,6 +308,7 @@ try {
 
 //OT Debug 0523
     bTC_ActuateTypeFunctionEnable = true;
+    bTC_Flash_Chage_TOD_add_ALLRED3s_Enable = false;
     bSmemTC_CCT_In_LongTanu_ActuateType_Switch = false;                                 //�s��S�OĲ��, 1 cycle change execplan
     usiSmemTC_CCT_In_LongTanu_ActuateType_PlanID = 1;                               //when actuating, change to this plan
 
@@ -1351,7 +1352,8 @@ try {
                                 ucActuatePhaseExtend,
                                 usiActuateVDID,
                                 ucBootingDisplayRedcount,
-                                ucTC_ActuateTypeByTOD
+                                ucTC_ActuateTypeByTOD,
+                                bTC_Flash_Chage_TOD_add_ALLRED3s_Enable
                                );
     return true;
   } catch (...) {}
@@ -1371,7 +1373,8 @@ try {
                                 &ucActuatePhaseExtend,
                                 &usiActuateVDID,
                                 &ucBootingDisplayRedcount,
-                                &ucTC_ActuateTypeByTOD
+                                &ucTC_ActuateTypeByTOD,
+                                &bTC_Flash_Chage_TOD_add_ALLRED3s_Enable
                                );
 
     return true;
@@ -2648,6 +2651,12 @@ try {
       pthread_mutex_unlock(&mutexSmem);
       break;
 
+    case(TCFlash_Chage_TOD_add_ALLRED3s):
+      pthread_mutex_lock(&mutexSmem);
+      bRet = bTC_Flash_Chage_TOD_add_ALLRED3s_Enable;
+      pthread_mutex_unlock(&mutexSmem);
+      break;
+
     default:
       bRet = false;
       break;
@@ -2788,6 +2797,13 @@ try {
     case(TCDynSegStatus):
       pthread_mutex_lock(&mutexSmem);
       bDynSegStatus = bTMP;
+      pthread_mutex_unlock(&mutexSmem);
+      break;
+
+    case(TCFlash_Chage_TOD_add_ALLRED3s):
+      pthread_mutex_lock(&mutexSmem);
+      bTC_Flash_Chage_TOD_add_ALLRED3s_Enable = bTMP;
+      vSave92TCSettingToDisk();
       pthread_mutex_unlock(&mutexSmem);
       break;
 
@@ -5168,7 +5184,7 @@ try {
             Pg_remainder[i] = usiPgTime[i] - 1;
         } else {
             Pg_remainder[i] = 0;
-;        }
+        }
     }
     return true;
   } catch (...) {}
@@ -5182,7 +5198,7 @@ try {
             Pr_remainder[i] = usiPrTime[i] - 1;
         } else {
             Pr_remainder[i] = 0;
-;        }
+        }
     }
     return true;
   } catch (...) {}

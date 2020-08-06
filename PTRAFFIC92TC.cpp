@@ -215,12 +215,11 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) { //Eason_
       switch (_ControlStrategy.DBit)
       {
         case 0x01:
-            _intervalTimer.vAllDynamicToTODCount(3); //countdown 3 sec
-            _intervalTimer.vAllDynamicMinchunCount(3);
-            smem.vSet5F18EffectTime(3);
-            // _intervalTimer.vAllDynamicToTODCount(_intervalTimer.vGetEffectTime());
-            // _intervalTimer.vAllDynamicMinchunCount(_intervalTimer.vGetEffectTime());
-            // smem.vSet5F18EffectTime(_intervalTimer.vGetEffectTime());
+            int i;
+            i = _intervalTimer.vGetEffectTime();
+            _intervalTimer.vAllDynamicToTODCount(i+3);
+            _intervalTimer.vAllDynamicMinchunCount(i+3);
+            smem.vSet5F18EffectTime(i+3);
             CSTC::_5f18_Debug_SW = false;
             stc.Lock_to_Load_Segment_for_Panel(stc.vGetUSIData(CSTC_exec_segment_current_seg_no));
             int Count = GetNowPlanOfSegtypeCount();
@@ -238,9 +237,17 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) { //Eason_
 
         case 0x30:
               smem.vSetINTData(TC92_PlanOneTime5F18_PlanID,stc.vGetUSIData(CSTC_exec_plan_plan_ID)); //set 5F18_PlanID = current PlanID
+              if (!CSTC::Lock_to_Set_Control_Strategy(STRATEGY_ALLDYNAMIC))
+              {
+                _intervalTimer.vAllDynamicToTODCount(_intervalTimer.vGetEffectTime());
+              }
+              else
+              {
+                _intervalTimer.vAllDynamicToTODCount(stc.vGet5F10BootStepTime());
+              }
               CSTC::Lock_to_Set_Control_Strategy(STRATEGY_ALLDYNAMIC);
               printf("Now is changing to ALLDYNAMIC\n\n");
-              _intervalTimer.vAllDynamicToTODCount(stc.vGet5F10BootStepTime()); //set current Step time
+              // _intervalTimer.vAllDynamicToTODCount(stc.vGet5F10BootStepTime()); //set current Step time
               _intervalTimer.vAllDynamicMinchunCount(EffectTime); //set timer
               CSTC::_5f18_Debug_SW = false;
               printf("exec_planid=%d\n",stc.vGetUSIData(CSTC_exec_plan_plan_ID));
@@ -389,59 +396,73 @@ bool PTRAFFIC92TC::vWriteReverseTimeData5F11(MESSAGEOK DataMessageIn) {
         case 0x01:
           stc._for_center_weekdayrev[0]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[7]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x02:
           stc._for_center_weekdayrev[1]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[8]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x03:
           stc._for_center_weekdayrev[2]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[9]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x04:
           stc._for_center_weekdayrev[3]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[10]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x05:
           stc._for_center_weekdayrev[4]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[11]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x06:
           stc._for_center_weekdayrev[5]._reverse_time_type =
+              stc._for_center_reversetime._reverse_time_type;
+          stc._for_center_weekdayrev[12]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
           break;
         case 0x07:
           stc._for_center_weekdayrev[6]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x0b:
-          stc._for_center_weekdayrev[7]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x0c:
-          stc._for_center_weekdayrev[8]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x0d:
-          stc._for_center_weekdayrev[9]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x0e:
-          stc._for_center_weekdayrev[10]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x0f:
-          stc._for_center_weekdayrev[11]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x10:
-          stc._for_center_weekdayrev[12]._reverse_time_type =
-              stc._for_center_reversetime._reverse_time_type;
-          break;
-        case 0x11:
           stc._for_center_weekdayrev[13]._reverse_time_type =
               stc._for_center_reversetime._reverse_time_type;
           break;
+        // case 0x0b:
+        //   stc._for_center_weekdayrev[7]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x0c:
+        //   stc._for_center_weekdayrev[8]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x0d:
+        //   stc._for_center_weekdayrev[9]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x0e:
+        //   stc._for_center_weekdayrev[10]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x0f:
+        //   stc._for_center_weekdayrev[11]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x10:
+        //   stc._for_center_weekdayrev[12]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
+        // case 0x11:
+        //   stc._for_center_weekdayrev[13]._reverse_time_type =
+        //       stc._for_center_reversetime._reverse_time_type;
+        //   break;
         default:
           break;
       }
@@ -1599,59 +1620,73 @@ bool PTRAFFIC92TC::vWriteSegment5F16(MESSAGEOK DataMessageIn) {
         case 0x01:
           stc._for_center_weekdayseg[0]._segment_type =
               stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[7]._segment_type =
+              stc._for_center_segment._segment_type;
           break;
         case 0x02:
           stc._for_center_weekdayseg[1]._segment_type =
+              stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[8]._segment_type =
               stc._for_center_segment._segment_type;
           break;
         case 0x03:
           stc._for_center_weekdayseg[2]._segment_type =
               stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[9]._segment_type =
+              stc._for_center_segment._segment_type;
           break;
         case 0x04:
           stc._for_center_weekdayseg[3]._segment_type =
+              stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[10]._segment_type =
               stc._for_center_segment._segment_type;
           break;
         case 0x05:
           stc._for_center_weekdayseg[4]._segment_type =
               stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[11]._segment_type =
+              stc._for_center_segment._segment_type;
           break;
         case 0x06:
           stc._for_center_weekdayseg[5]._segment_type =
+              stc._for_center_segment._segment_type;
+          stc._for_center_weekdayseg[12]._segment_type =
               stc._for_center_segment._segment_type;
           break;
         case 0x07:
           stc._for_center_weekdayseg[6]._segment_type =
               stc._for_center_segment._segment_type;
-          break;
-        case 0x0b:
-          stc._for_center_weekdayseg[7]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x0c:
-          stc._for_center_weekdayseg[8]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x0d:
-          stc._for_center_weekdayseg[9]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x0e:
-          stc._for_center_weekdayseg[10]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x0f:
-          stc._for_center_weekdayseg[11]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x10:
-          stc._for_center_weekdayseg[12]._segment_type =
-              stc._for_center_segment._segment_type;
-          break;
-        case 0x11:
           stc._for_center_weekdayseg[13]._segment_type =
               stc._for_center_segment._segment_type;
           break;
+        // case 0x0b:
+        //   stc._for_center_weekdayseg[7]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x0c:
+        //   stc._for_center_weekdayseg[8]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x0d:
+        //   stc._for_center_weekdayseg[9]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x0e:
+        //   stc._for_center_weekdayseg[10]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x0f:
+        //   stc._for_center_weekdayseg[11]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x10:
+        //   stc._for_center_weekdayseg[12]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
+        // case 0x11:
+        //   stc._for_center_weekdayseg[13]._segment_type =
+        //       stc._for_center_segment._segment_type;
+        //   break;
         default:
           break;
       }
@@ -3020,7 +3055,7 @@ bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) { //E
       if (stc.vGetUSIData(CSTC_exec_phase_current_subphase_step) == 0 && !CSTC::Lock_to_Set_Control_Strategy(STRATEGY_ALLDYNAMIC)) { //only green step can do
         CSTC::Lock_to_Set_Next_Step();
         stc.vReportGoToNextPhaseStep_5F0C();
-        CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
+        // CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
         vReturnToCenterACK(0x5F, 0x1C);
       }
       return true;
@@ -3032,7 +3067,7 @@ bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) { //E
             {
               CSTC::Lock_to_Set_Next_Step();
               stc.vReportGoToNextPhaseStep_5F0C();
-              CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
+              // CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
             }
               smem.setDynJump_subphaseID(siSubPhaseID - 1);
               smem.setDynJump_subphase(true);
@@ -3042,19 +3077,29 @@ bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) { //E
       //要如何判斷時間走了多久是這邊動態調整的一個重要課題，
       //因為目前控制器的機制是單用timer去控的，
       //如果沒有另外一個變數去紀錄目前走了多久的話根本無法得知目前走了多久的綠燈也就無從重算綠燈秒數
-      int _5f1c_new_EffectTime = siEffectTime - CSTC::get5F1CAlreadyPassedSec();
+      if(stc.vGetUSIData(CSTC_exec_phase_current_subphase_step) == 0 && !CSTC::Lock_to_Set_Control_Strategy(STRATEGY_ALLDYNAMIC)) 
+      {
+      short _5f1c_new_EffectTime = siEffectTime - CSTC::get5F1CAlreadyPassedSec();
       if (_5f1c_new_EffectTime > 0) {
+        if(smem.minchun_Dyn_5F1C_reserve_value.DoubleCheck == true && smem.minchun_Dyn_5F1C_reserve_value.ReserveSubphase == CSTC::get_exec_phase_current_subphase() && smem.minchun_Dyn_5F1C_reserve_value.ReserveSec == siEffectTime)
+        {smem.minchun_Dyn_5F1C_reserve_value.DoubleCheck = false;} //當DoubleCheck開啟且預存分相與秒數等於當前指令分相與秒數 不做任何動作並關閉DoubleCheck
+        else
+        {
         _intervalTimer.vAllDynamicToTODCount(_5f1c_new_EffectTime);
         stc.vReportGoToNextPhaseStep_5F0C();
         vReturnToCenterACK(0x5F, 0x1C);
+        }
       } else if (_5f1c_new_EffectTime <= 0) { //jump to next step
-        intervalTimer::Lock_to_Set_Next_Dyn_Step();
+        // intervalTimer::Lock_to_Set_Next_Dyn_Step();
+        CSTC::Lock_to_Set_Next_Step();
         stc.vReportGoToNextPhaseStep_5F0C();
         vReturnToCenterACK(0x5F, 0x1C);
+      }
       }
     } else if (siStepID == 1 &&
         siSubPhaseID > 0 && siEffectTime > 0) {
       smem.minchun_Dyn_5F1C_reserve_value.isNew = true;
+      smem.minchun_Dyn_5F1C_reserve_value.DoubleCheck = true;
       smem.minchun_Dyn_5F1C_reserve_value.ReserveSubphase = siSubPhaseID - 1;
       smem.minchun_Dyn_5F1C_reserve_value.ReserveStep = siStepID - 1;
       smem.minchun_Dyn_5F1C_reserve_value.ReserveSec = siEffectTime;

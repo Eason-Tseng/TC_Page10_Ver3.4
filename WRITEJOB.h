@@ -15,17 +15,17 @@ class WRITEJOB:public JOB
 
         bool WriteWorkByMESSAGEOUT(MESSAGEOK);
 
-        bool WriteSUCCESS92(BYTE,BYTE);                                         //92¦~ª©¦^À³¦¨¥\(14) AA BB SEQ LCN LCN LEN LEN OF 80 CommandID1 CommandID2 AA CC CKS
-        bool WriteFAIL92(BYTE,BYTE,BYTE,BYTE);                                  //92¦~ª©¦^À³¥¢±Ñ(16) AA BB SEQ LCN LCN LEN LEN OF 81 CommandID1 CommandID2 ErrorCode ParameterNumber AA CC CKS
-        bool WriteSUCCESS87(void);                                              //87¦~ª©¦^À³¦¨¥\(  )
-        bool WriteFAIL87(void);                                                 //87¦~ª©¦^À³¥¢±Ñ
+        bool WriteSUCCESS92(BYTE,BYTE);                                         //92ï¿½~ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½\(14) AA BB SEQ LCN LCN LEN LEN OF 80 CommandID1 CommandID2 AA CC CKS
+        bool WriteFAIL92(BYTE,BYTE,BYTE,BYTE);                                  //92ï¿½~ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(16) AA BB SEQ LCN LCN LEN LEN OF 81 CommandID1 CommandID2 ErrorCode ParameterNumber AA CC CKS
+        bool WriteSUCCESS87(void);                                              //87ï¿½~ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½\(  )
+        bool WriteFAIL87(void);                                                 //87ï¿½~ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-        bool WriteACK92(BYTE);                                                  //92¦~ª©¥¿»{ª¾½X(8) AA DD SEQ LCN LCN LEN LEN CKS
-        bool WriteNAK92(BYTE,BYTE);                                             //92¦~ª©­t»{ª¾½X(9) AA EE SEQ LCN LCN LEN LEN ERR CKS
-        bool WriteACK77(void);                                                  //77¦~ª©¥¿»{ª¾½X(5) AA DD LCN LCN CKS
-        bool WriteNAK77(BYTE);                                                  //77¦~ª©­t»{ª¾½X(6) AA EE LCN LCN ERR CKS
+        bool WriteACK92(BYTE);                                                  //92ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½X(8) AA DD SEQ LCN LCN LEN LEN CKS
+        bool WriteNAK92(BYTE,BYTE);                                             //92ï¿½~ï¿½ï¿½ï¿½tï¿½{ï¿½ï¿½ï¿½X(9) AA EE SEQ LCN LCN LEN LEN ERR CKS
+        bool WriteACK77(void);                                                  //77ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½X(5) AA DD LCN LCN CKS
+        bool WriteNAK77(BYTE);                                                  //77ï¿½~ï¿½ï¿½ï¿½tï¿½{ï¿½ï¿½ï¿½X(6) AA EE LCN LCN ERR CKS
 
-        bool WritePhysicalOut(BYTE *,int,int);                                  //¹ê»Ú¼g¥X(¿é¤J¨ó©w,ªø«×,±ý¼g¥XªºDEVICE)
+        bool WritePhysicalOut(BYTE *,int,int);                                  //ï¿½ï¿½Ú¼gï¿½X(ï¿½ï¿½Jï¿½ï¿½w,ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½gï¿½Xï¿½ï¿½DEVICE)
         bool WritePhysicalOutNoSetSeqNoResend(BYTE *,int, int);
 
         //OT Pass
@@ -33,6 +33,7 @@ class WRITEJOB:public JOB
 
         bool WriteAskW77E58FWVer();
         bool WriteLetW77E58AutoControl();
+        int CheckDoubleAA(BYTE *, int);
 
     private:
         BCDSW bcdSwitchHi;

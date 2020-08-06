@@ -104,8 +104,8 @@ class STORAGE:public IODEVICE
                                              short int *,
                                              unsigned char *);
 
-        bool vWrite92TCSettingFile(unsigned char, int, int, int, bool, unsigned short int, unsigned char, unsigned short int, unsigned char, unsigned char);
-        bool vRead92TCSettingFile(unsigned char *, int *, int *, int *, bool *, unsigned short int *, unsigned char *, unsigned short int *, unsigned char *, unsigned char *);
+        bool vWrite92TCSettingFile(unsigned char, int, int, int, bool, unsigned short int, unsigned char, unsigned short int, unsigned char, unsigned char, bool);
+        bool vRead92TCSettingFile(unsigned char *, int *, int *, int *, bool *, unsigned short int *, unsigned char *, unsigned short int *, unsigned char *, unsigned char *, bool *);
 
 
          bool vWriteShareMEMALLFile(char *);

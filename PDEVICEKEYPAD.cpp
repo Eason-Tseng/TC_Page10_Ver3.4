@@ -114,6 +114,8 @@
 
 #include "screenActuateArwenStatus.h"
 #include "screenGreenConflictRecord.h"  //Eason_Ver3.4
+#include "SCREENFunctionSet.h"  //Eason_Ver3.4
+#include "SCREENFunctionSetConfirm.h"
 
 /*OTCombo0714*/
 #include "CDataToMessageOK.h"
@@ -803,6 +805,13 @@ try {
                  screenGreenConflictRecord.DoKeyWork(key);
             break;
 
+            case cFUNCTIONSET:  //Eason_Ver3.4
+                 screenFunctionSet.DoKeyWork(key);
+            break;
+
+            case cFUNCTIONSETCONFIRM:  //Eason_Ver3.4
+                 screenFunctionSetConfirm.DoKeyWork(key);
+            break;
 
             default:
             //OTMARKPRINTF  printf("[Error Message] Key No Define!\n");

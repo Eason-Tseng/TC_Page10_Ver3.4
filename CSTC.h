@@ -146,7 +146,7 @@ class CSTC {
       _timer_reportcount, _timer_record_traffic, _timer_plan_WDT;
   static timer_t _timer_reversetime;
   static struct itimerspec _itimer_plan, _itimer_redcount, _itimer_panelcount,
-      _itimer_reportcount, _itimer_record_traffic, _itimer_plan_WDT;
+      _itimer_reportcount, _itimer_record_traffic, _itimer_plan_WDT,_itimer_plan_test;
   static struct itimerspec _itimer_reversetime;
   static void TimersCreating(void);
   static void TimersSetting(void);
@@ -178,6 +178,7 @@ class CSTC {
   static unsigned short int _exec_segment_current_seg_no;  //start from 0
   static unsigned short int _exec_reversetime_current_rev_no;  //start from 0
   static unsigned short int _exec_reversetime_current_rev_step;  //start from 0
+  static unsigned short int _5F03_Before_Timer;
 
   static unsigned short int reverseloss;    //jacky20140507
   static unsigned short int ReverseLight_log;   //jacky20140507
@@ -316,6 +317,7 @@ class CSTC {
   static int _5f1c_already_passed_sec;
   static bool MinchunDynFlag;
  public:
+  static void CSTC::Lock_to_Set_Next_Step_for_5f1001();
   static bool _5f18_Debug_SW;
   static bool isMinchunDynFlag();
   static void setMinchunDynFlag(bool minchunDynFlag);

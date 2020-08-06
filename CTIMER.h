@@ -49,6 +49,7 @@ class intervalTimer
         bool vAllDynamicToTODCount(unsigned short int);
         bool vAllDynamicMinchunCount(unsigned short int);
         unsigned short int vGetEffectTime(void);
+        // unsigned int vGetEffectTime_for_test(void);
 
         unsigned short int usiGreenConflictCount;
 

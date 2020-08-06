@@ -3,7 +3,8 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <sys/vfs.h> //Eason_Ver3.4 For Log Cleaner
+#include <stdio.h>  //Eason_Ver3.4
 //---------------------------------------------------------------------------
 STORAGE::STORAGE(void)
 {
@@ -506,7 +507,8 @@ bool STORAGE::vWrite92TCSettingFile( unsigned char ucSmem92TC_ControlStrategyIN,
                                      unsigned char ucActuatePhaseExtendIN,
                                      unsigned short int usiActuateVDIDIN,
                                      unsigned char ucBootingDisplayRedcountIN,
-                                     unsigned char ucTC_ActuateTypeByTODIN
+                                     unsigned char ucTC_ActuateTypeByTODIN,
+                                     bool bTC_Flash_Chage_TOD_add_ALLRED3sIN
                                    )
 {
 try{
@@ -530,6 +532,7 @@ try{
         fwrite( &usiActuateVDIDIN, sizeof( unsigned short int ), 1, _wfile );
         fwrite( &ucBootingDisplayRedcountIN, sizeof( unsigned char ), 1, _wfile );
         fwrite( &ucTC_ActuateTypeByTODIN, sizeof( unsigned char ), 1, _wfile );
+        fwrite( &bTC_Flash_Chage_TOD_add_ALLRED3sIN, sizeof(bool), 1, _wfile);
     fclose( _wfile );
   }
 
@@ -549,7 +552,8 @@ bool STORAGE::vRead92TCSettingFile(  unsigned char *ucSmem92TC_ControlStrategyIN
                                      unsigned char *ucActuatePhaseExtendIN,
                                      unsigned short int *usiActuateVDIDIN,
                                      unsigned char *ucBootingDisplayRedcountIN,
-                                     unsigned char *ucTC_ActuateTypeByTODIN
+                                     unsigned char *ucTC_ActuateTypeByTODIN,
+                                     bool *bTC_Flash_Chage_TOD_add_ALLRED3sIN
                                    )
 {
 try{
@@ -593,6 +597,7 @@ try{
         }
 
         fread( ucTC_ActuateTypeByTODIN, sizeof( unsigned char ), 1, _rfile );
+        fread( bTC_Flash_Chage_TOD_add_ALLRED3sIN, sizeof( bool), 1, _rfile );
 
     fclose( _rfile );
   }
@@ -681,8 +686,29 @@ try{
         fwrite( enterCode, 2, 1, Lane_wfile );              //�g�Jenter
         fclose( Lane_wfile );
   }
-
-  system("sync");
+  //--------------------------Eason_Ver3.4---------------------------------------------------------------
+  // struct statfs diskInfo;
+	// statfs("/cct", &diskInfo);
+	// unsigned long long totalBlocks = diskInfo.f_bsize;
+	// unsigned long long freeDisk = diskInfo.f_bfree*totalBlocks;
+	// size_t mbFreedisk = freeDisk>>20;
+	// printf ("/cct free=%dMB\n", mbFreedisk);
+  // if(mbFreedisk <= 10)
+  // {
+  //   int monthTem = 1;
+  //   char logClean[256];
+  //   sprintf(logClean, "rm /cct/Data/SETTING/%#04d*", currenttime->tm_year+1898);
+  //   system(logClean);
+  //   system("sync");
+  //   for(int i=0;i<12;i++)
+  //   {
+  //     sprintf(logClean, "rm /cct/Data/SETTING/%#04d%#02d*", currenttime->tm_year+1899, currenttime->tm_mon-i);
+  //     system(logClean);
+  //     system("sync");
+  //     monthTem = currenttime->tm_mon-i;
+  //     if(monthTem == 0) i=12;
+  //   }
+  // }
   pthread_mutex_unlock(&mutexDisk);
 } catch(...){}
 }

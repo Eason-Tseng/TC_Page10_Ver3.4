@@ -185,6 +185,7 @@ void SendRequestToKeypad(void);                                                 
 //OT20140415
 #define TCDynSegSwitch            38
 #define TCDynSegStatus            39
+#define TCFlash_Chage_TOD_add_ALLRED3s 40
 
 #define TC_Phase 0
 #define TC_Plan 1
@@ -482,7 +483,9 @@ typedef struct sRevSyncStatus {
 #define cACTUATEARWENSTATUS 410
 
 #define cNETMASKSET         411
-#define cGREENCONFLICTRECORD 412
+#define cGREENCONFLICTRECORD 412  //Eason_Ver3.4
+#define cFUNCTIONSET 413  //Eason_Ver3.4
+#define cFUNCTIONSETCONFIRM 414
 
 //smem.vSetACK_W2W / smem.vGetACK_W2W
 #define cTCToCenter          0
