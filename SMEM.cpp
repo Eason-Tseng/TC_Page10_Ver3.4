@@ -120,9 +120,9 @@ try {
     bTCSegmentTypeUpdate = false;
     ucCSTCControlStrategy = 10; //TOD
 
-    iFirmwareYear = 2020; //控制器韌體版本時間 年
-    iFirmwareMonth = 8; //控制器韌體版本時間 月
-    iFirmwareDay = 12; //控制器韌體版本時間 日
+    iFirmwareYear = 2021; //控制器韌體版本時間 年
+    iFirmwareMonth = 02; //控制器韌體版本時間 月
+    iFirmwareDay = 19; //控制器韌體版本時間 日
     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
     iFirmwareSecondVersion = 4;//控制器韌體版本Lo位元
     iFirmwareSecondVersion1 = 0x11;

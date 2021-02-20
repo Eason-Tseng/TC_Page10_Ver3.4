@@ -48,6 +48,7 @@ class intervalTimer
 //        bool vSend92VD_6F02(void);
         bool vAllDynamicToTODCount(unsigned short int);
         bool vAllDynamicMinchunCount(unsigned short int);
+        unsigned short int vGetMinchunCount(void);
         unsigned short int vGetEffectTime(void);
         // unsigned int vGetEffectTime_for_test(void);
 

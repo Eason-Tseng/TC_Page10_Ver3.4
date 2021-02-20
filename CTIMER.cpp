@@ -1461,5 +1461,15 @@ void intervalTimer::vReportCurrentOperationMode_5F08_inCtimer(void) {
   } catch (...) {}
 }
 
+unsigned short int intervalTimer::vGetMinchunCount(void) { //Eason_Ver3.4
+  try {
 
+    unsigned short int time_difference = 0;
+    timer_gettime(_tMinchun, &_itMinchun);
+    time_difference = (_itMinchun.it_value.tv_sec);
+
+    return time_difference;
+
+  } catch (...) {}
+}
 

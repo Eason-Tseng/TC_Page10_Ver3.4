@@ -230,9 +230,12 @@ bool PTRAFFIC92TC::vWriteControlStrategy5F10(MESSAGEOK DataMessageIn) { //Eason_
           break;
 
         case 0x08:
-            CSTC::_5f18_Debug_SW = true;
-            smem.vSet5F18EffectTime(EffectTime);
-            printf("Now 5F18 can change PlanID\n");
+            if(_intervalTimer.vGetMinchunCount() <= 0)
+            {
+              CSTC::_5f18_Debug_SW = true;
+              smem.vSet5F18EffectTime(EffectTime);
+              printf("Now 5F18 can change PlanID\n");
+            }
           break;
 
         case 0x30:
@@ -2041,7 +2044,7 @@ bool PTRAFFIC92TC::vWriteRunPlan5F18(MESSAGEOK DataMessageIn) {
 
         //OT1000218
         uiTimeOutPlan = stc.vDetermineTimeToNextPlan();
-        smem.vSet5F18EffectTime(uiTimeOutPlan);
+        // smem.vSet5F18EffectTime(uiTimeOutPlan);
 
         printf("uiTimeOutPlan:%d\n", uiTimeOutPlan);
         printf("iSetPlanID:%d\n", iSetPlanID);
@@ -3065,13 +3068,13 @@ bool PTRAFFIC92TC::vGoToNextPhaseStepControl_5F1C(MESSAGEOK DataMessageIn) { //E
         ((siSubPhaseID - 1 != stc.get_exec_phase_current_subphase()))) { //only green step & !current_subphase can do
             if(stc.vGetUSIData(CSTC_exec_phase_current_subphase_step) == 0 && !CSTC::Lock_to_Set_Control_Strategy(STRATEGY_ALLDYNAMIC)) 
             {
-              CSTC::Lock_to_Set_Next_Step();
-              stc.vReportGoToNextPhaseStep_5F0C();
+              // CSTC::Lock_to_Set_Next_Step();
+              // stc.vReportGoToNextPhaseStep_5F0C();
               // CSTC::Dyn_to_TOD_Step_set(usiCurrentSubphaseStep);
-            }
               smem.setDynJump_subphaseID(siSubPhaseID - 1);
               smem.setDynJump_subphase(true);
               vReturnToCenterACK(0x5F, 0x1C);
+            }
     } else if (CSTC::get_exec_phase_current_subphase() == siSubPhaseID - 1
         && usiCurrentSubphaseStep == siStepID - 1) { // step & phase == current step & phase
       //要如何判斷時間走了多久是這邊動態調整的一個重要課題，
