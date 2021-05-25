@@ -6,10 +6,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 #include "SMEM.h"
 
 #define dShowPrintfMsg
-
+extern int errno;
 //---------------------------------------------------------------------------
 UDP::UDP(void)
 {
@@ -179,7 +180,13 @@ try {
     if (alreadyOpen) sendLength=sendto(udpfd,writeMessage,length,0,(struct sockaddr *)&send_addr,sizeof(send_addr));
     pthread_mutex_unlock(&mutexUdp);
 
-    if (sendLength==-1)  return false;
+    if (sendLength==-1) 
+    {
+      char msg[1024];
+      sprintf(msg,"Sendto() error Number is %d",errno);
+      smem.vWriteMsgToDOM(msg);
+      return false;
+    }
     else if (sendLength==length){
 
         char tempBuff[256],buff[2048]="";

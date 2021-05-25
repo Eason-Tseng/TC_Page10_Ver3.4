@@ -379,6 +379,7 @@ try {
 //OT ADD 961219
 //                   printf("smem.centerSocket.GetPortAlreadyOpen():%d,iPacketLcn:%d\n", smem.centerSocket.GetPortAlreadyOpen(), iPacketLcn);
                    if (smem.centerSocket.GetPortAlreadyOpen()  && (iPacketLcn != 0) ) {
+                        smem.iSetVer34CommLog(2);
                         // for(int i=7;i<length-4;i++) // Check DoubleAA
                         // {
                         //   if(packet[i] == 0xAA)
@@ -401,6 +402,7 @@ try {
                        statusUdp=smem.centerSocket.UdpSend(packet,length,"centerSocket");
                    }
                    if (smem.testerSocket.GetPortAlreadyOpen()  && (iPacketLcn != 0) ) {
+                     smem.iSetVer34CommLog(3);
                        statusUdp=smem.testerSocket.UdpSend(packet,length,"testerSocket");
                    }
 
@@ -992,23 +994,23 @@ try {
 int WRITEJOB::CheckDoubleAA(BYTE *packet,int length)
 {
   int iLEN;
-                        for(int i=7;i<length-4;i++) // Check DoubleAA
-                        {
-                          if(packet[i] == 0xAA)
-                          {
-                            for(int j=length;j>=i;j--)
-                            {
-                              packet[j+1] = packet[j];
-                            }
-                            iLEN = packet[5] * 256 + packet[6];
-                            iLEN++;
-                            packet[5] = HI(iLEN);
-                            packet[6] = LO(iLEN);
-                            length++;
-                            i++;
-                            packet[length-1] = 0;                                          // init checksum
-                            for (int j=0; j<length-1; j++) packet[length-1] ^= packet[j];
-                          }
-                        }
-                        return length;
+  for(int i=7;i<length-4;i++) // Check DoubleAA
+  {
+    if(packet[i] == 0xAA)
+    {
+      for(int j=length;j>=i;j--)
+      {
+        packet[j+1] = packet[j];
+      }
+      iLEN = packet[5] * 256 + packet[6];
+      iLEN++;
+      packet[5] = HI(iLEN);
+      packet[6] = LO(iLEN);
+      length++;
+      i++;
+      packet[length-1] = 0;                                          // init checksum
+      for (int j=0; j<length-1; j++) packet[length-1] ^= packet[j];
+    }
+  }
+  return length;
 }

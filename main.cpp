@@ -1065,6 +1065,7 @@ int main(int argc, char *argv[]) {
 
                 if (smem.centerSocket.GetPortAlreadyOpen()) {
                     if (FD_ISSET(smem.centerSocket.Getfd(), &readfs)) {
+                        smem.iSetVer34CommLog(0);
                         readSelectLength = smem.centerSocket.UdpRead();
 
                         if (readSelectLength > 0) {
@@ -1211,6 +1212,7 @@ int main(int argc, char *argv[]) {
 
                 if (smem.testerSocket.GetPortAlreadyOpen()) {
                     if (FD_ISSET(smem.testerSocket.Getfd(), &readfs)) {
+                        smem.iSetVer34CommLog(1);
                         readSelectLength = smem.testerSocket.UdpRead();
                         if (readSelectLength > 0) {
                             if (smem.vGetCommEnable() == true) {

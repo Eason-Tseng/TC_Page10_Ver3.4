@@ -64,6 +64,7 @@ struct itimerspec intervalTimer::_it10;
 struct itimerspec intervalTimer::_itTrafficeLight;
 
 pthread_mutex_t intervalTimer::_ctimer_mutex = PTHREAD_MUTEX_INITIALIZER;
+bool Commcheck = true;
 
 //intervalTimer-------------------------------------------------------------
 intervalTimer::intervalTimer() {
@@ -382,6 +383,62 @@ void *intervalTimer::PTime(void *arg) {
             case (10):
 
               smem.vSendPedAndRedCountEverySec();   //Eason_Ver3.4
+
+              if(smem.iGetVer34CommLog(0) >= 10 && smem.bGetVer34CommLog(0) == true)
+              {
+                smem.bSetVer34CommLog(0,false);
+                smem.vWriteMsgToDOM("Disconnected from center 1 for more than 10 seconds");
+              }
+              else if(smem.iGetVer34CommLog(0) < 10 && smem.bGetVer34CommLog(0) == false)
+              {
+                smem.bSetVer34CommLog(0,true);
+                smem.vWriteMsgToDOM("Connect with center 1");
+              }
+
+              if(smem.iGetVer34CommLog(1) >= 10 && smem.bGetVer34CommLog(1) == true)
+              {
+                smem.bSetVer34CommLog(1,false);
+                smem.vWriteMsgToDOM("Disconnected from center 2 for more than 10 seconds");
+              }
+              else if(smem.iGetVer34CommLog(1) < 10 && smem.bGetVer34CommLog(1) == false)
+              {
+                smem.bSetVer34CommLog(1,true);
+                smem.vWriteMsgToDOM("Connect with center 2");
+              }
+
+              if(smem.iGetVer34CommLog(2) >= 10 && smem.bGetVer34CommLog(2) == true)
+              {
+                smem.bSetVer34CommLog(2,false);
+                smem.vWriteMsgToDOM("More than 10 seconds to send data to the center 1");
+              }
+              else if(smem.iGetVer34CommLog(2) < 10 && smem.bGetVer34CommLog(2) == false)
+              {
+                smem.bSetVer34CommLog(2,true);
+                smem.vWriteMsgToDOM("Re-report to the center 1");
+              }
+
+              if(smem.iGetVer34CommLog(3) >= 10 && smem.bGetVer34CommLog(3) == true)
+              {
+                smem.bSetVer34CommLog(3,false);
+                smem.vWriteMsgToDOM("More than 10 seconds to send data to the center 2");
+              }
+              else if(smem.iGetVer34CommLog(3) < 10 && smem.bGetVer34CommLog(3) == false)
+              {
+                smem.bSetVer34CommLog(3,true);
+                smem.vWriteMsgToDOM("Re-report to the center 2");
+              }
+
+              if(smem.vLoadCenterConnectStatus() == true && Commcheck == false)
+              {
+                Commcheck = true;
+                smem.vWriteMsgToDOM("Communication connection");
+              }
+              if(smem.vLoadCenterConnectStatus() == false && Commcheck == true)
+              {
+                Commcheck = false;
+                smem.vWriteMsgToDOM("Communication is interrupted");
+              }
+              smem.vAddVer34CommLog();
               //WatchDog
               printf(
                   "*********************************************************************\n");

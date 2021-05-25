@@ -121,8 +121,8 @@ try {
     ucCSTCControlStrategy = 10; //TOD
 
     iFirmwareYear = 2021; //控制器韌體版本時間 年
-    iFirmwareMonth = 02; //控制器韌體版本時間 月
-    iFirmwareDay = 19; //控制器韌體版本時間 日
+    iFirmwareMonth = 04; //控制器韌體版本時間 月
+    iFirmwareDay = 21; //控制器韌體版本時間 日
     iFirmwareFirstVersion = 3; //控制器韌體版本Hi位元
     iFirmwareSecondVersion = 4;//控制器韌體版本Lo位元
     iFirmwareSecondVersion1 = 0x11;
@@ -5218,4 +5218,30 @@ try {
 
     return true;
   } catch (...) {}
+}
+void SMEM::vAddVer34CommLog()
+{
+  iVer34CommLog[0]++;
+  iVer34CommLog[1]++;
+  iVer34CommLog[2]++;
+  iVer34CommLog[3]++;
+  return;
+}
+void SMEM::iSetVer34CommLog(int No)
+{
+  iVer34CommLog[No] = 0;
+  return;
+}
+void SMEM::bSetVer34CommLog(int No,bool power)
+{
+  bVer34CommLog[No] = power;
+  return;
+}
+int SMEM::iGetVer34CommLog(int No)
+{
+  return iVer34CommLog[No];
+}
+bool SMEM::bGetVer34CommLog(int No)
+{
+  return bVer34CommLog[No];
 }

@@ -4789,9 +4789,9 @@ void CSTC::CalculateCompensation_in_TOD(void) {
     printf("in CalculateCompensation_in_TOD, _current_strategy:%x\n",
            _ControlStrategy.DBit);
 
-    if (_ControlStrategy.switchBit.b4 == true) {
-      return;
-    }
+    // if (_ControlStrategy.switchBit.b4 == true) {
+    //   return;
+    // }
     if (isMinchunDynFlag())return;
     //OT1000218, may be need compensation
     if (_ControlStrategy.DBit == 0x30) {
@@ -4799,9 +4799,9 @@ void CSTC::CalculateCompensation_in_TOD(void) {
     }
 
     //OT20111107
-    if (smem.vGetThisCycleRunCCJPlan5F18() == true) {
-      return;
-    }
+    // if (smem.vGetThisCycleRunCCJPlan5F18() == true) {
+    //   return;
+    // }
     if(smem.vGetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch)){ //Eason_Ver3.3
       smem.vSetBOOLData(TC_CCT_In_LongTanu_ActuateType_comped_Switch,false);
       return;

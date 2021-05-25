@@ -399,6 +399,11 @@ public:
     bool vSetPrRemainder(unsigned short int *);
     bool vSetPgRemainder(unsigned short int *);
     bool CheckbCountIF[8][5][8];
+    void vAddVer34CommLog();
+    void iSetVer34CommLog(int No);
+    void bSetVer34CommLog(int No,bool power);
+    int iGetVer34CommLog(int No);
+    bool bGetVer34CommLog(int No);
 private:
     pthread_mutex_t mutexSmem;                                              //?O?@?O????
 
@@ -683,6 +688,8 @@ private:
     int JumpTo_subphaseID;
     int DynStepEffectime;
     bool DynStepEffectime_Renew_State;
+    int iVer34CommLog[4];
+    bool bVer34CommLog[4];
 
 };
 //---------------------------------------------------------------------------
